@@ -1,0 +1,14 @@
+# Sandbox DNA-C Params
+# https://sandboxdnac.cisco.com/
+
+DnaCenter:
+  Hostname: sandboxdnac.cisco.com
+  Port: 443
+  Username: devnetuser
+  Password: Cisco123!
+
+IntentApiV1NetworkDevice:
+  Hosts: cs3850,cat_9k_1
+
+IntentApiV1NetworkDeviceCount:
+  Version: '1.0'
