@@ -8,6 +8,7 @@ Make sure you are using python 3.7
 Clone the repository
 
 Make sure all requirements are satisfied
+   
     pip install -r requirements.txt
     
 Run group_sample.py - output should look like this:
