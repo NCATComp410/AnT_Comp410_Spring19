@@ -81,7 +81,6 @@ def tc_dna_intent_api_v1_network_device():
 
 
 def run_all_tests():
-    tc_dna_intent_api_v1_network_device_count()
     tc_dna_intent_api_v1_network_device()
 
 
