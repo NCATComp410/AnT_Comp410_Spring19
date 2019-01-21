@@ -45,10 +45,77 @@ def tc_dna_intent_api_v1_network_device_count():
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
 
+def tc_dna_intent_api_vi_topology_l2_vlan():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1TopologyL2Vlan', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # find available vlan names
+    response = dnac.get('dna/intent/api/v1/topology/vlan/vlan-names')
+
+    # get additional information about each vlan
+    for vlan_name in response.json()['response']:
+        response = dnac.get('dna/intent/api/v1/topology/l2/' + vlan_name)
+        pp.pprint(response.json())
+
+    # test complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_vi_topology_site_topology():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1SiteTopology', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # get site topology
+    response = dnac.get('dna/intent/api/v1/topology/site-topology')
+    pp.pprint(response.json())
+
+    # find unique countries
+    country_list = []
+    for site in response.json()['response']['sites']:
+        if site['locationCountry']:
+            if not site['locationCountry'] in country_list:
+                country_list.append(site['locationCountry'])
+    tc.okay('countries found:' + ','.join(country_list))
+
+    # test complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_vi_topology_physical_topology():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1PhysicalTopology', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # get physical topology
+    response = dnac.get('dna/intent/api/v1/topology/physical-topology')
+    pp.pprint(response.json())
+
+
 def run_all_tests():
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
+    tc_dna_intent_api_vi_topology_l2_vlan()
+    tc_dna_intent_api_vi_topology_site_topology()
+    tc_dna_intent_api_vi_topology_physical_topology()
+
 
 run_all_tests()
