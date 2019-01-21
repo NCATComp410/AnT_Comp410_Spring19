@@ -98,7 +98,7 @@ def tc_dna_intent_api_v1_interface_network_device():
 # /dna/intent/api/v1/interface/count
 def tc_dna_intent_api_v1_interface_count():
     # create this test case
-    tc = TestCase(test_name='IntentApiV1InterfaceNetworkDevice', yaml_file='params.yaml')
+    tc = TestCase(test_name='IntentApiV1InterfaceNetworkDeviceCount', yaml_file='params.yaml')
 
     # create a session to the DNA-C
     dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
