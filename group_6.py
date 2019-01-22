@@ -45,10 +45,69 @@ def tc_dna_intent_api_v1_network_device_count():
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
 
+# dna/intent/api/v1/file/namespace
+def tc_dna_intent_api_v1_file_namespace():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1FileNamespace', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/file/namespace')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_v1_file_namespace_network_device_export():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1FileNamespaceNetworkDeviceExport', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/file/namespace/network_device_export')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_v1_file_namespace_ivm_kgv():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1FileNamespaceIvmKgv', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/file/namespace/ivm-kgv')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
 def run_all_tests():
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
+    tc_dna_intent_api_v1_file_namespace()
+    tc_dna_intent_api_v1_file_namespace_network_device_export()
+    tc_dna_intent_api_v1_file_namespace_ivm_kgv()
+
 
 run_all_tests()
