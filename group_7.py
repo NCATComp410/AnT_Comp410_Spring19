@@ -5,6 +5,7 @@ import pprint
 # define a pretty-printer for diagnostics
 pp = pprint.PrettyPrinter(indent=4)
 
+
 # This is a basic test case template included in each team's
 # source code file.  Use this function as a template to build
 # additional test cases
@@ -45,10 +46,68 @@ def tc_dna_intent_api_v1_network_device_count():
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
 
+def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1FileNamespacePkiTrustpool', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/file/namespace/pki-trustpool')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_v1_file_namespace_swimfiles():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1FileNamespaceSwimfiles', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/file/namespace/swimfiles')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_v1_file_namespace_ejbca():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1FileNamespaceEjbca', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/file/namespace/ejbca')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
 def run_all_tests():
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
+    tc_dna_intent_api_v1_file_namespace_pki_trustpool()
+    tc_dna_intent_api_v1_file_namespace_swimfiles()
+    tc_dna_intent_api_v1_file_namespace_ejbca()
+
 
 run_all_tests()

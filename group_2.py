@@ -45,10 +45,68 @@ def tc_dna_intent_api_v1_network_device_count():
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
 
+def tc_dna_intent_api_v1_topology_l3_ospf():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1TopologyL3Ospf', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/topology/l3/ospf')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_v1_topology_l3_isis():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1TopologyL3Isis', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/topology/l3/isis')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_v1_topology_l3_static():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1TopologyL3Static', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/topology/l3/static')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
 def run_all_tests():
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
+    tc_dna_intent_api_v1_topology_l3_ospf()
+    tc_dna_intent_api_v1_topology_l3_isis()
+    tc_dna_intent_api_v1_topology_l3_static()
+
 
 run_all_tests()

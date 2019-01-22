@@ -44,11 +44,90 @@ def tc_dna_intent_api_v1_network_device_count():
         else:
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
+#dna/intent/api/v1/network-device
+def tc_dna_intent_api_v1_network_device():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1NetworkDevice', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/network-device')
+    pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_v1_network_device_module():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1NetworkDeviceModule', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute base command so we can get a list of modules
+    response = dnac.get('dna/intent/api/v1/network-device')
+
+    # get the unique module IDs
+    module_list = []
+    for device in response.json()['response']:
+        for line_card in device['lineCardId'].split(', '):
+            if line_card not in module_list:
+                module_list.append(line_card)
+
+    # get information about each line card
+    for module in module_list:
+        response = dnac.get('dna/intent/api/v1/network-device/module/' + module)
+        pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
+def tc_dna_intent_api_v1_network_device_brief():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1NetworkDeviceBrief', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute base command so we can get a list of device ID
+    response = dnac.get('dna/intent/api/v1/network-device')
+
+    # get the unique device IDs
+    device_id_list = []
+    for device in response.json()['response']:
+        if device['id'] not in device_id_list:
+            device_id_list.append(device['id'])
+    tc.okay('found devices:' + ','.join(device_id_list))
+
+    # get brief information about each device
+    for device_id in device_id_list:
+        response = dnac.get('dna/intent/api/v1/network-device/' + device_id + '/brief')
+        pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
 
 def run_all_tests():
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
+    tc_dna_intent_api_v1_network_device()
+    tc_dna_intent_api_v1_network_device_module()
+    tc_dna_intent_api_v1_network_device_brief()
+
 
 run_all_tests()
