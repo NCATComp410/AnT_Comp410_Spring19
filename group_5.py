@@ -124,6 +124,35 @@ def tc_dna_intent_api_v1_interface_network_device_range():
     tc.okay('complete')
 
 
+def tc_dna_intent_api_v1_network_device_module():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1NetworkDeviceModule', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute base command so we can get a list of modules
+    response = dnac.get('dna/intent/api/v1/network-device')
+
+    # get the unique module IDs
+    module_list = []
+    for device in response.json()['response']:
+        for line_card in device['lineCardId'].split(', '):
+            if line_card not in module_list:
+                module_list.append(line_card)
+
+    # get information about each line card
+    for module in module_list:
+        response = dnac.get('dna/intent/api/v1/network-device/module/' + module)
+        pp.pprint(response.json())
+
+    # complete
+    tc.okay('complete')
+
+
 def run_all_tests():
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
@@ -132,6 +161,7 @@ def run_all_tests():
     tc_dna_intent_api_v1_network_device_collection_schedule_global()
     tc_dna_intent_api_v1_network_device_id_vlan()
     tc_dna_intent_api_v1_interface_network_device_range()
+    tc_dna_intent_api_v1_network_device_module()
 
 
 run_all_tests()
