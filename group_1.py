@@ -105,7 +105,13 @@ def tc_dna_intent_api_vi_topology_physical_topology():
 
     # get physical topology
     response = dnac.get('dna/intent/api/v1/topology/physical-topology')
-    pp.pprint(response.json())
+
+    # Check to see if a response other than 200-OK was received
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        pp.pprint(response.json())
 
 
 def run_all_tests():
