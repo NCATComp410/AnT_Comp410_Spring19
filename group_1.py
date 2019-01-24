@@ -124,7 +124,6 @@ def tc_dna_intent_api_vi_topology_physical_topology():
         # this test should fail if any other response code received
         tc.fail('expected 200-OK actual response was ' + str(response.status_code))
     else:
-        tc.fail('Testing fail to be removed', True)
         pp.pprint(response.json())
 
 
