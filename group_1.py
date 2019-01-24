@@ -57,11 +57,18 @@ def tc_dna_intent_api_vi_topology_l2_vlan():
 
     # find available vlan names
     response = dnac.get('dna/intent/api/v1/topology/vlan/vlan-names')
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
 
     # get additional information about each vlan
     for vlan_name in response.json()['response']:
         response = dnac.get('dna/intent/api/v1/topology/l2/' + vlan_name)
-        pp.pprint(response.json())
+        if response.status_code != 200:
+            # this test should fail if any other response code received
+            tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+        else:
+            pp.pprint(response.json())
 
     # test complete
     tc.okay('complete')
