@@ -5,4 +5,4 @@ python:
 install:
    - pip install -r requirements.txt
 script:
-  - group_1
+  - python3 group_1.py
