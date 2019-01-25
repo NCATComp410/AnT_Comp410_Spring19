@@ -59,14 +59,14 @@ def tc_dna_intent_api_vi_topology_l2_vlan():
     response = dnac.get('dna/intent/api/v1/topology/vlan/vlan-names')
     if response.status_code != 200:
         # this test should fail if any other response code received
-        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
 
     # get additional information about each vlan
     for vlan_name in response.json()['response']:
         response = dnac.get('dna/intent/api/v1/topology/l2/' + vlan_name)
         if response.status_code != 200:
             # this test should fail if any other response code received
-            tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+            tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
         else:
             pp.pprint(response.json())
 
@@ -116,7 +116,7 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     # Check to see if a response other than 200-OK was received
     if response.status_code != 200:
         # this test should fail if any other response code received
-        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
     else:
         pp.pprint(response.json())
 
