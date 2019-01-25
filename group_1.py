@@ -86,7 +86,13 @@ def tc_dna_intent_api_vi_topology_site_topology():
 
     # get site topology
     response = dnac.get('dna/intent/api/v1/topology/site-topology')
-    pp.pprint(response.json())
+
+    # Check to see if a response other than 200-OK was received
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
+    else:
+        pp.pprint(response.json())
 
     # find unique countries
     country_list = []
