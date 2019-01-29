@@ -24,6 +24,7 @@ def tc_dna_intent_api_v1_network_device_count():
     # Check to see if a response other than 200-OK was received
     if response.status_code != 200:
         # this test should fail if any other response code received
+        # good sample return code check
         tc.fail('expected 200-OK actual response was ' + str(response.status_code))
     else:
         # check to make sure there is at least 1 device present to work with
