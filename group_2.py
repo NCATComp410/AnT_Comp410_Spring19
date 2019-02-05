@@ -3,6 +3,7 @@ from utils import TestCase
 import pprint
 
 # define a pretty-printer for diagnostics
+#hi
 pp = pprint.PrettyPrinter(indent=4)
 
 # This is a basic test case template included in each team's
