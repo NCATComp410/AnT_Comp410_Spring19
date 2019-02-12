@@ -58,7 +58,11 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/file/namespace/pki-trustpool')
-    pp.pprint(response.json())
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        pp.pprint(response.json())
 
     # complete
     tc.okay('complete')
@@ -76,7 +80,11 @@ def tc_dna_intent_api_v1_file_namespace_swimfiles():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/file/namespace/swimfiles')
-    pp.pprint(response.json())
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        pp.pprint(response.json())
 
     # complete
     tc.okay('complete')
@@ -94,7 +102,11 @@ def tc_dna_intent_api_v1_file_namespace_ejbca():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/file/namespace/ejbca')
-    pp.pprint(response.json())
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        pp.pprint(response.json())
 
     # complete
     tc.okay('complete')
