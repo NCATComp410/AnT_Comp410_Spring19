@@ -3,8 +3,8 @@ from utils import TestCase
 import pprint
 
 # define a pretty-printer for diagnostics
-#hi
 pp = pprint.PrettyPrinter(indent=4)
+
 
 # This is a basic test case template included in each team's
 # source code file.  Use this function as a template to build
@@ -84,6 +84,7 @@ def tc_dna_intent_api_v1_topology_l3_isis():
 
 def tc_dna_intent_api_v1_topology_l3_static():
     # create this test case
+    # Anthony Garcia
     tc = TestCase(test_name='IntentApiV1TopologyL3Static', yaml_file='params.yaml')
 
     # create a session to the DNA-C
@@ -95,7 +96,14 @@ def tc_dna_intent_api_v1_topology_l3_static():
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/topology/l3/static')
     pp.pprint(response.json())
-
+    # ######################################################################
+    # ###EDITS####
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        pp.pprint(response.json())
+    # ####################################################################
     # complete
     tc.okay('complete')
 
