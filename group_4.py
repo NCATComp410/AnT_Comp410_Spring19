@@ -110,10 +110,43 @@ def tc_dna_intent_api_v1_interface_count():
     response = dnac.get('dna/intent/api/v1/interface/count')
     pp.pprint(response.json())
 
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        # check to make sure there is at least 1 device present to work with
+        device_count = response.json()['response']
+        if device_count:
+            tc.okay(f'found {device_count} total devices')
+        else:
+            # If no devices were found it's a pretty good bet that most/all remaining
+            # tests will fail, so, consider this a critical failure and abort here by
+            # setting abort=True
+            tc.fail('no devices were found', abort=True)
+
     # list all interfaces and count them
     response = dnac.get('dna/intent/api/v1/interface')
     print(len(response.json()['response']))
 
+    tc.okay('complete')
+
+
+# dna/intent/api/v1/network-device
+def tc_dna_intent_api_v1_network_device():
+    # create this test case
+    tc = TestCase(test_name='IntentApiV1NetworkDevice', yaml_file='params.yaml')
+
+    # create a session to the DNA-C
+    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                     port=tc.params['DnaCenter']['Port'],
+                     username=tc.params['DnaCenter']['Username'],
+                     password=tc.params['DnaCenter']['Password'])
+
+    # execute the command and get response
+    response = dnac.get('dna/intent/api/v1/network-device')
+    pp.pprint(response.json())
+
+    # complete
     tc.okay('complete')
 
 
@@ -125,5 +158,7 @@ def run_all_tests():
     tc_dna_intent_api_v1_interface()
     tc_dna_intent_api_v1_interface_network_device()
     tc_dna_intent_api_v1_interface_count()
+    tc_dna_intent_api_v1_network_device()
+
 
 run_all_tests()

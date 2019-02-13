@@ -17,7 +17,6 @@ def tc_dna_intent_api_v1_network_device_count():
                      port=tc.params['DnaCenter']['Port'],
                      username=tc.params['DnaCenter']['Username'],
                      password=tc.params['DnaCenter']['Password'])
-
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/network-device/count')
 
@@ -71,8 +70,13 @@ def tc_dna_intent_api_v1_network_device_config():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/network-device/config')
-    pp.pprint(response.json())
-
+    if response.status_code == 200:
+        print("Correct status code")
+        print("Status code =",response.status_code)
+    #pp.pprint(response.json())
+    else:
+        print("Incorrect status code")
+        print("Status code =", response.status_code)
     # complete
     tc.okay('complete')
 
@@ -119,10 +123,14 @@ def run_all_tests():
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
-    # add new test cases to be run here
+
+
+    # add test cases to these methods
     tc_dna_intent_api_v1_network_device_config()
     tc_dna_intent_api_v1_network_device_config_count()
     tc_dna_intent_api_v1_network_device_config_device()
+
+
 
 
 run_all_tests()

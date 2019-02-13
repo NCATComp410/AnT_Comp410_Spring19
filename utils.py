@@ -1,6 +1,7 @@
 import yaml
 import requests
 from requests.auth import HTTPBasicAuth
+from datetime import datetime
 
 # Disable insecure warnings
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -41,6 +42,15 @@ class DnaCenter:
             dbprint(f'login to dnac using username:{username} password:{password}')
             self.login(username, password)
 
+    # this function will log the result of each get and response
+    def __log_result(self, url, response):
+        d = datetime.now()
+        with open ('response.log', 'a') as f:
+            print(d.isoformat(), file=f)
+            print(url, file=f)
+            print(response, file=f)
+            print(response.json(), file=f)
+
     # implement basic GET method
     def get(self, url, params={}, headers={}):
         # If there are any params build into a string
@@ -48,11 +58,14 @@ class DnaCenter:
         for p in params:
             param_str = param_str + '?' + p + '=' + params[p]
 
-        # construct the get url, send it, return the result
+        # construct the get url, send it
         get_url = self.base_url + url + param_str
         dbprint('get:' + get_url)
-        return self.session.get(get_url, headers=headers)
+        response = self.session.get(get_url, headers=headers)
 
+        # log the response to file and then return it
+        self.__log_result(get_url, response)
+        return response
 
     # Login to the DNA-C and get an auth token which will be used
     # to interact for the remainder of this session
