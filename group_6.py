@@ -53,6 +53,7 @@ def tc_dna_intent_api_v1_file_namespace():
     # create a session to the DNA-C
     dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
                      port=tc.params['DnaCenter']['Port'],
+
                      username=tc.params['DnaCenter']['Username'],
                      password=tc.params['DnaCenter']['Password'])
 
