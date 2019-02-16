@@ -61,7 +61,7 @@ def tc_dna_intent_api_v1_file_namespace():
     response = dnac.get('dna/intent/api/v1/file/namespace')
     #pp.pprint(response.json())
     if response.status_code==200:
-        print("IT Works!!")
+        print("IT WORKS ")
     else:
         print("IT DOES NOT WORK")
     # complete
