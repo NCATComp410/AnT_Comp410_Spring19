@@ -174,3 +174,11 @@ https://sandboxdnac.cisco.com:443/dna/intent/api/v1/topology/l3/isis
 https://sandboxdnac.cisco.com:443/dna/intent/api/v1/topology/l3/static
 <Response [200]>
 {'response': {'nodes': [{'deviceType': 'Cisco Catalyst 9300 Switch', 'label': 'test-router.domain.net', 'ip': '10.10.22.70', 'softwareVersion': '16.6.1', 'greyOut': True, 'nodeType': 'device', 'family': 'Switches and Hubs', 'platformId': 'C9300-24UX', 'tags': ['InterestingDevice'], 'role': 'CORE', 'roleSource': 'MANUAL', 'customParam': {}, 'additionalInfo': {'macAddress': 'f8:7b:20:71:4d:80', 'latitude': '51.517954', 'siteid': '3c6fdc72-c755-45c8-a032-99ee3ce60fe9', 'longitude': '-0.085751'}, 'id': '3a909883-948f-47c2-8e34-65a740ab423e'}, {'deviceType': 'wired', 'label': '10.10.22.114', 'ip': '10.10.22.114', 'greyOut': True, 'nodeType': 'HOST', 'family': 'WIRED', 'role': 'HOST', 'customParam': {}, 'additionalInfo': {'macAddress': '00:1e:13:a5:b9:40'}, 'id': '47140091-fa69-4b40-9731-4fc825380d5b'}], 'links': [{'source': '3a909883-948f-47c2-8e34-65a740ab423e', 'startPortID': '5453c235-3a1d-4d6f-83bc-5d7c61ebf38a', 'target': '47140091-fa69-4b40-9731-4fc825380d5b', 'linkStatus': 'UP', 'greyOut': True, 'additionalInfo': {}}]}, 'version': '1.0'}
+2019-02-17T21:27:51.612718
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/network-device/config/count
+<Response [200]>
+{'response': 1, 'version': '1.0'}
+2019-02-17T21:28:40.310730
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/network-device/config/count
+<Response [200]>
+{'response': 1, 'version': '1.0'}
