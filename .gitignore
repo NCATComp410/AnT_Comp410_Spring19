@@ -1,5 +1,5 @@
 # Ignore pycharm .idea files
 .idea
 .pytest_cache
-.response.log
+response.log
 __pycache__
