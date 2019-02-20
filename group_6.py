@@ -53,13 +53,17 @@ def tc_dna_intent_api_v1_file_namespace():
     # create a session to the DNA-C
     dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
                      port=tc.params['DnaCenter']['Port'],
+
                      username=tc.params['DnaCenter']['Username'],
                      password=tc.params['DnaCenter']['Password'])
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/file/namespace')
-    pp.pprint(response.json())
-
+    #pp.pprint(response.json())
+    if response.status_code==200:
+        print("IT WORKS ")
+    else:
+        print("IT DOES NOT WORK")
     # complete
     tc.okay('complete')
 
@@ -106,8 +110,8 @@ def run_all_tests():
 
     # add new test cases to be run here
     tc_dna_intent_api_v1_file_namespace()
-    tc_dna_intent_api_v1_file_namespace_network_device_export()
-    tc_dna_intent_api_v1_file_namespace_ivm_kgv()
+    #tc_dna_intent_api_v1_file_namespace_network_device_export()
+    #tc_dna_intent_api_v1_file_namespace_ivm_kgv()
 
 
 run_all_tests()

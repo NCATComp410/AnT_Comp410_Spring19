@@ -113,7 +113,13 @@ def tc_dna_intent_api_v1_network_device_config_device():
 
     for device_id in device_list:
         response = dnac.get('dna/intent/api/v1/network-device/' + device_id + '/config')
-        pp.pprint(response.json())
+        if response.status_code == 200:
+            print("Correct status code")
+            print("Status code =", response.status_code)
+        # pp.pprint(response.json())
+        else:
+            print("Incorrect status code")
+            print("Status code =", response.status_code)
 
     # complete
     tc.okay('complete')
@@ -121,13 +127,13 @@ def tc_dna_intent_api_v1_network_device_config_device():
 
 def run_all_tests():
     # run this test case first since it will do a basic 'ping'
-    tc_dna_intent_api_v1_network_device_count()
+    #tc_dna_intent_api_v1_network_device_count()
 
 
 
     # add test cases to these methods
-    tc_dna_intent_api_v1_network_device_config()
-    tc_dna_intent_api_v1_network_device_config_count()
+    #tc_dna_intent_api_v1_network_device_config()
+    #tc_dna_intent_api_v1_network_device_config_count()
     tc_dna_intent_api_v1_network_device_config_device()
 
 
