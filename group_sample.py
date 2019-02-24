@@ -26,13 +26,22 @@ use_mock = False
 # library and allow us to insert our own mocked-up responses.
 # @responses.activate
 
+# Add ability to fall-back to older API
+use_intent = True
+
+if use_intent:
+    intent_api = 'dna/intent/'
+else:
+    intent_api = ''
+
 
 def tc_dna_intent_api_v1_network_device():
     # create this test case
     tc = TestCase(test_name='IntentApiV1NetworkDevice', yaml_file='params.yaml')
 
     # REST API command to be executed
-    rest_cmd = 'dna/intent/api/v1/network-device'
+    rest_cmd = intent_api + 'api/v1/network-device'
+
     if not use_mock:
         # In this case we don't want to use a mock and will create a normal session to the dnac
         # create a session to the DNA-C and get a response back
@@ -138,6 +147,7 @@ def tc_dna_intent_api_v1_network_device():
     # list of hosts and serial numbers found
     print('Hosts Found:')
     pp.pprint(host_list)
+    print(','.join(host_list))
     print('Serial Numbers:')
     pp.pprint(serialNumber_list)
 
@@ -156,7 +166,7 @@ def tc_dna_intent_api_v1_network_device():
     # make sure serialNumber parameter works
     sn_ok = True
     for sn in serialNumber_list:
-        rest_cmd = 'dna/intent/api/v1/network-device'
+        rest_cmd = intent_api + 'api/v1/network-device'
 
         if not use_mock:
             response = dnac.get(rest_cmd, params={'serialNumber': sn})
@@ -255,7 +265,7 @@ def tc_dna_intent_api_v1_network_device():
         tc.okay('serial numbers correct')
 
     # try an invalid serial number
-    rest_cmd = 'dna/intent/api/v1/network-device'
+    rest_cmd = intent_api + 'api/v1/network-device'
 
     if not use_mock:
         response = dnac.get(rest_cmd, params={'serialNumber': 'invalid'})

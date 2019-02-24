@@ -8,7 +8,7 @@ DnaCenter:
   Password: Cisco123!
 
 IntentApiV1NetworkDevice:
-  Hosts: cs3850,cat_9k_1
+  Hosts: asr1001-x,cat_9k_1.abc.inc,cat_9k_2,cs3850.abc.inc
 
 IntentApiV1NetworkDeviceCount:
   Version: '1.0'
