@@ -59,7 +59,12 @@ def tc_dna_intent_api_v1_interface():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/interface')
-    pp.pprint(response.json())
+    # Check to see if a response other than 200-OK was received
+    if response.status_code != 200:
+    # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+     pp.pprint(response.json())
 
     # complete
     tc.okay('complete')
@@ -77,6 +82,10 @@ def tc_dna_intent_api_v1_interface_network_device():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/interface')
+    # Check to see if a response other than 200-OK was received
+    if response.status_code != 200:
+    # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
 
     # get unique list of deviceId
     device_list = []
@@ -108,7 +117,12 @@ def tc_dna_intent_api_v1_interface_count():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/interface/count')
-    pp.pprint(response.json())
+    # Check to see if a response other than 200-OK was received
+    if response.status_code != 200:
+    # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        pp.pprint(response.json())
 
     if response.status_code != 200:
         # this test should fail if any other response code received
@@ -144,7 +158,12 @@ def tc_dna_intent_api_v1_network_device():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/network-device')
-    pp.pprint(response.json())
+    # Check to see if a response other than 200-OK was received
+    if response.status_code != 200:
+    # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        pp.pprint(response.json())
 
     # complete
     tc.okay('complete')
