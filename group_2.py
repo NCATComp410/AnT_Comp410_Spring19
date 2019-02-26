@@ -47,6 +47,7 @@ def tc_dna_intent_api_v1_network_device_count():
 
 
 def tc_dna_intent_api_v1_topology_l3_ospf():
+    # Jakeem Cofield
     # create this test case
     tc = TestCase(test_name='IntentApiV1TopologyL3Ospf', yaml_file='params.yaml')
 
@@ -66,7 +67,7 @@ def tc_dna_intent_api_v1_topology_l3_ospf():
         tc.fail('expected 200-OK actual response was ' + str(response.status_code))
     else:
         print("The Project works")
-       # pp.pprint(response.json())
+        pp.pprint(response.json())
     # ####################################################################
     # complete
     tc.okay('complete')
@@ -86,15 +87,15 @@ def tc_dna_intent_api_v1_topology_l3_isis():
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/topology/l3/isis')
     # pp.pprint(response.json())
-# ###################################################################################
-    # edits
+    # ####################################################################
+    # ###EDITS####
     # Check to see if a response other than 200-OK was received
     if response.status_code != 200:
         # this test should fail if any other response code received
         tc.fail('expected 200-OK actual response was ' + str(response.status_code))
     else:
         pp.pprint(response.json())
-# ###############################################################
+    # ####################################################################
 
     # complete
     tc.okay('complete')
