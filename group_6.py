@@ -76,6 +76,10 @@ def tc_dna_intent_api_v1_file_namespace_network_device_export():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/file/namespace/network_device_export')
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
     pp.pprint(response.json())
 
     # complete
