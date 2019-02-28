@@ -283,10 +283,10 @@ def tc_dna_intent_api_vi_topology_physical_topology():
                                      'linkStatus': 'UP',
                                      'additionalInfo': {}}]},
                      'version': '1.0'}
-        responses.add(responses.GET, 'http://' + intent_api + rest_cmd,
+        responses.add(responses.GET, 'http://' + rest_cmd,
                       json = json_mock,
                       status=200)
-        response = requests.get('http://' + intent_api + rest_cmd)
+        response = requests.get('http://' + rest_cmd)
 
 
     # Check to see if a response other than 200-OK was received
