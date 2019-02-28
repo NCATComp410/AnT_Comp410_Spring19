@@ -7,7 +7,21 @@ import requests
 # define a pretty-printer for diagnostics
 pp = pprint.PrettyPrinter(indent=4)
 
+# When use_mock is set to true we won't actually communicate with the DNA-C
+# Instead we'll use some previous responses.
+# Mocks are useful for several reasons.  Sometimes the real DNA-C will be down
+# for maintenance and you will want to make progress on your code.
+# They are also useful for simulating some responses which cannot be easily
+# created using the real system - such as error conditions.
 use_mock = False
+
+# Add ability to fall-back to older API
+use_intent = True
+
+if use_intent:
+    intent_api = 'dna/intent/'
+else:
+    intent_api = ''
 
 # This is a basic test case template included in each team's
 # source code file.  Use this function as a template to build
@@ -116,7 +130,7 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     tc = TestCase(test_name='IntentApiV1PhysicalTopology', yaml_file='params.yaml')
 
     # REST API comment to be executed
-    rest_cmd = 'dna/intent/api/v1/topology/physical-topology'
+    rest_cmd = intent_api + 'api/v1/topology/physical-topology'
 
     # If not using mock, create a DNA-C session and make request
     if not use_mock:
@@ -269,10 +283,10 @@ def tc_dna_intent_api_vi_topology_physical_topology():
                                      'linkStatus': 'UP',
                                      'additionalInfo': {}}]},
                      'version': '1.0'}
-        responses.add(responses.GET, 'http://' + rest_cmd,
+        responses.add(responses.GET, 'http://' + intent_api + rest_cmd,
                       json = json_mock,
                       status=200)
-        response = requests.get('http://' + rest_cmd)
+        response = requests.get('http://' + intent_api + rest_cmd)
 
 
     # Check to see if a response other than 200-OK was received
