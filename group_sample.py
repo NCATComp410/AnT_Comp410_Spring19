@@ -7,6 +7,14 @@ import requests
 # define a pretty-printer for detailed diagnostics
 pp = pprint.PrettyPrinter(indent=4)
 
+# Add ability to fall-back to older API
+use_intent = True
+
+if use_intent:
+    intent_api = 'dna/intent/'
+else:
+    intent_api = ''
+
 # This is a very basic example of a mock.  To use this mock
 #
 # (1) set use_mock = True
@@ -25,14 +33,6 @@ use_mock = False
 # Uncomment this line to use the mock this will essentially hi-jack normal requests
 # library and allow us to insert our own mocked-up responses.
 # @responses.activate
-
-# Add ability to fall-back to older API
-use_intent = True
-
-if use_intent:
-    intent_api = 'dna/intent/'
-else:
-    intent_api = ''
 
 
 def tc_dna_intent_api_v1_network_device():

@@ -3,9 +3,12 @@
 
 DnaCenter:
   Hostname: sandboxdnac.cisco.com
+  #Hostname: dnac1.cisco.com
   Port: 443
   Username: devnetuser
+  #Username: cisco
   Password: Cisco123!
+  #Password: CiscoDNA!
 
 IntentApiV1NetworkDevice:
   Hosts: asr1001-x,cat_9k_1.abc.inc,cat_9k_2,cs3850.abc.inc
