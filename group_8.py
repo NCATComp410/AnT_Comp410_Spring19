@@ -138,7 +138,7 @@ def run_all_tests():
 
 
     # add test cases to these methods
-    #tc_dna_intent_api_v1_network_device_config()
+    tc_dna_intent_api_v1_network_device_config()
     tc_dna_intent_api_v1_network_device_config_count()
     #tc_dna_intent_api_v1_network_device_config_device()
 
