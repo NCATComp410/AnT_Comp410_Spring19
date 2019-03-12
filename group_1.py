@@ -23,6 +23,10 @@ if use_intent:
 else:
     intent_api = ''
 
+# Uncomment this line to use the mock this will essentially hi-jack normal requests
+# library and allow us to insert our own mocked-up responses.
+# @responses.activate
+
 # This is a basic test case template included in each team's
 # source code file.  Use this function as a template to build
 # additional test cases
