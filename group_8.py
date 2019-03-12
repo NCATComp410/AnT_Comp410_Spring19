@@ -73,7 +73,7 @@ def tc_dna_intent_api_v1_network_device_config():
     if response.status_code == 200:
         print("Correct status code")
         print("Status code =",response.status_code)
-    #pp.pprint(response.json())
+        #pp.pprint(response.json())
     else:
         print("Incorrect status code")
         print("Status code =", response.status_code)
@@ -138,11 +138,9 @@ def run_all_tests():
 
 
     # add test cases to these methods
-    #tc_dna_intent_api_v1_network_device_config()
+
+    tc_dna_intent_api_v1_network_device_config()
     tc_dna_intent_api_v1_network_device_config_count()
-    # tc_dna_intent_api_v1_network_device_config_device()
-
-
-
+    tc_dna_intent_api_v1_network_device_config_device()
 
 run_all_tests()
