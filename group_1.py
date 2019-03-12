@@ -7,6 +7,13 @@ import requests
 # define a pretty-printer for diagnostics
 pp = pprint.PrettyPrinter(indent=4)
 
+# This is a very basic example of a mock.  To use this mock
+#
+# (1) set use_mock = True
+# (2) uncomment @responses.activate
+#
+# Be sure to change all this back or you will continue using the mock!
+#
 # When use_mock is set to true we won't actually communicate with the DNA-C
 # Instead we'll use some previous responses.
 # Mocks are useful for several reasons.  Sometimes the real DNA-C will be down
