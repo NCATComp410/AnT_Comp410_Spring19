@@ -28,11 +28,11 @@ else:
 # for maintenance and you will want to make progress on your code.
 # They are also useful for simulating some responses which cannot be easily
 # created using the real system - such as error conditions.
-use_mock = False
+use_mock = True
 
 # Uncomment this line to use the mock this will essentially hi-jack normal requests
 # library and allow us to insert our own mocked-up responses.
-# @responses.activate
+@responses.activate
 
 
 def tc_dna_intent_api_v1_network_device():
