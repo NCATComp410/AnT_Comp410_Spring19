@@ -30,12 +30,16 @@ def tc_dna_intent_api_v1_network_device_count():
         # check to make sure there is at least 1 device present to work with
         device_count = response.json()['response']
         if device_count:
-            tc.okay(f'found {device_count} total devices')
+            tc.okay('found {device_count} total devices')
         else:
-            # If no devices were found it's a pretty good bet that most/all remaining
-            # tests will fail, so, consider this a critical failure and abort here by
-            # setting abort=True
-            tc.fail('no devices were found', abort=True)
+          # execute the command and get response
+          response = dnac.get('dna/intent/api/v1/network-device/count')
+
+# Check to see if a response other than 200-OK was received
+    if response.status_code != 200:
+# this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+        tc.fail('no devices were found', abort=True)
 
         # check the version
         expected_version = tc.params['IntentApiV1NetworkDeviceCount']['Version']
@@ -43,7 +47,7 @@ def tc_dna_intent_api_v1_network_device_count():
         if expected_version == actual_version:
             tc.okay('correct version found')
         else:
-            tc.fail(f'expected version {expected_version} instead found {actual_version}')
+            tc.fail('expected version {expected_version} instead found {actual_version}')
 
 
 # dna/intent/api/v1/interface
@@ -85,7 +89,7 @@ def tc_dna_intent_api_v1_interface_network_device():
         if device['deviceId'] not in device_list:
             device_count += 1
             device_list.append(device['deviceId'])
-    tc.okay(f'found {device_count} devices:' + ','.join(device_list))
+    tc.okay('found {device_count} devices:' + ','.join(device_list))
 
     for device_id in device_list:
         response = dnac.get('dna/intent/api/v1/interface/network-device/' + device_id)
@@ -117,7 +121,7 @@ def tc_dna_intent_api_v1_interface_count():
         # check to make sure there is at least 1 device present to work with
         device_count = response.json()['response']
         if device_count:
-            tc.okay(f'found {device_count} total devices')
+            tc.okay('found {device_count} total devices')
         else:
             # If no devices were found it's a pretty good bet that most/all remaining
             # tests will fail, so, consider this a critical failure and abort here by
@@ -133,6 +137,7 @@ def tc_dna_intent_api_v1_interface_count():
 
 # dna/intent/api/v1/network-device
 def tc_dna_intent_api_v1_network_device():
+   
     # create this test case
     tc = TestCase(test_name='IntentApiV1NetworkDevice', yaml_file='params.yaml')
 
