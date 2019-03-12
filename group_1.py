@@ -58,11 +58,18 @@ def tc_dna_intent_api_vi_topology_l2_vlan():
 
     # find available vlan names
     response = dnac.get('dna/intent/api/v1/topology/vlan/vlan-names')
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
 
     # get additional information about each vlan
     for vlan_name in response.json()['response']:
         response = dnac.get('dna/intent/api/v1/topology/l2/' + vlan_name)
-        pp.pprint(response.json())
+        if response.status_code != 200:
+            # this test should fail if any other response code received
+            tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
+        else:
+            pp.pprint(response.json())
 
     # test complete
     tc.okay('complete')
@@ -80,7 +87,13 @@ def tc_dna_intent_api_vi_topology_site_topology():
 
     # get site topology
     response = dnac.get('dna/intent/api/v1/topology/site-topology')
-    pp.pprint(response.json())
+
+    # Check to see if a response other than 200-OK was received
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
+    else:
+        pp.pprint(response.json())
 
     # find unique countries
     country_list = []
@@ -106,7 +119,16 @@ def tc_dna_intent_api_vi_topology_physical_topology():
 
     # get physical topology
     response = dnac.get('dna/intent/api/v1/topology/physical-topology')
-    pp.pprint(response.json())
+
+    # Check to see if a response other than 200-OK was received
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
+    else:
+        pp.pprint(response.json())
+
+    # test complete
+    tc.okay('complete')
 
 
 def run_all_tests():
