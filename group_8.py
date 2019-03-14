@@ -1,5 +1,7 @@
 from utils import DnaCenter
 from utils import TestCase
+import responses
+import requests
 import pprint
 
 # define a pretty-printer for diagnostics
@@ -55,31 +57,50 @@ def get_unique_device_id(dnac):
         if device['id'] not in device_list:
             device_list.append(device['id'])
     return device_list
+use_intent = True
+if use_intent:
+    intent_api = 'dna/intent/'
+else:
+    intent_api = ''
 
+use_mock = True
+@responses.activate
 
 # dna/intent/api/v1/network-device/config
 def tc_dna_intent_api_v1_network_device_config():
     # create this test case
-    tc = TestCase(test_name='IntentApiV1NetworkDeviceConfig', yaml_file='params.yaml')
-
-    # create a session to the DNA-C
+ tc = TestCase(test_name='IntentApiV1NetworkDeviceConfig', yaml_file='params.yaml')
+ response = None
+ if not use_mock :
+     # create a session to the DNA-C
     dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
                      port=tc.params['DnaCenter']['Port'],
                      username=tc.params['DnaCenter']['Username'],
                      password=tc.params['DnaCenter']['Password'])
 
-    # execute the command and get response
     response = dnac.get('dna/intent/api/v1/network-device/config')
-    if response.status_code == 200:
+    print("dnac in use")
+ else:
+    print("dnac not in use")
+    json_mock ={'response': 4, 'version': '1.0'}
+    rest_cmd = intent_api + 'api/v1/network-device'
+
+    # execute the command and get response
+    responses.add(responses.GET, 'http://' + rest_cmd,
+                  json=json_mock,
+                  status=200)
+    response = requests.get('http://' + rest_cmd)
+
+
+ if response.status_code == 200:
         print("Correct status code")
         print("Status code =",response.status_code)
     #pp.pprint(response.json())
-    else:
+ else:
         print("Incorrect status code")
         print("Status code =", response.status_code)
-    # complete
-    tc.okay('complete')
-
+ # complete
+ tc.okay('complete')
 
 def tc_dna_intent_api_v1_network_device_config_count():
     # create this test case
@@ -93,7 +114,13 @@ def tc_dna_intent_api_v1_network_device_config_count():
 
     # execute the command and get response
     response = dnac.get('dna/intent/api/v1/network-device/config/count')
-    pp.pprint(response.json())
+    if response.status_code == 200:
+        print("Correct status code")
+        print("Status code =",response.status_code)
+    # pp.pprint(response.json())
+    else:
+        print("Incorrect status code")
+        print("Status code =", response.status_code)
 
     # complete
     tc.okay('complete')
@@ -132,9 +159,9 @@ def run_all_tests():
 
 
     # add test cases to these methods
-    #tc_dna_intent_api_v1_network_device_config()
+    tc_dna_intent_api_v1_network_device_config()
     #tc_dna_intent_api_v1_network_device_config_count()
-    tc_dna_intent_api_v1_network_device_config_device()
+    #tc_dna_intent_api_v1_network_device_config_device()
 
 
 
