@@ -1,6 +1,19 @@
 from utils import DnaCenter
 from utils import TestCase
 import pprint
+import responses
+import requests
+
+use_intent = True
+
+if use_intent:
+    intent_api = 'dna/intent/'
+else:
+    intent_api = ''
+
+use_mock = True
+
+
 
 # define a pretty-printer for diagnostics
 pp = pprint.PrettyPrinter(indent=4)
@@ -45,19 +58,46 @@ def tc_dna_intent_api_v1_network_device_count():
         else:
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
+@responses.activate
 
 def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
+    #Kristian Rosa
+
     # create this test case
     tc = TestCase(test_name='IntentApiV1FileNamespacePkiTrustpool', yaml_file='params.yaml')
 
-    # create a session to the DNA-C
-    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
-                     port=tc.params['DnaCenter']['Port'],
-                     username=tc.params['DnaCenter']['Username'],
-                     password=tc.params['DnaCenter']['Password'])
-
     # execute the command and get response
-    response = dnac.get('dna/intent/api/v1/file/namespace/pki-trustpool')
+    #response = dnac.get('dna/intent/api/v1/file/namespace/pki-trustpool')
+
+    # REST API command to be executed
+    rest_cmd = intent_api + 'api/v1/file/namespace/pki-trustpool'
+
+    if not use_mock:
+        # In this case we don't want to use a mock and will create a normal session to the dnac
+        # create a session to the DNA-C and get a response back
+        dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                         port=tc.params['DnaCenter']['Port'],
+                         username=tc.params['DnaCenter']['Username'],
+                         password=tc.params['DnaCenter']['Password'])
+
+        # get list of all network devices
+        response = dnac.get(rest_cmd)
+    else:
+        # In this case we're going to use a mock and not actually communicate with the DNA-C
+        # The json_mock is something which was saved in responses.log during a successful session
+        # It is much easier to build this way than to build it from scratch!
+
+        #edited mock
+        json_mock = {'response': [{'type': 'TESTING', 'location': 'DTEST'}], 'version': 2.3,}
+
+        # instead of actually talking to the DNA-C we're going to mock-up the response
+        # this command inserts our mock-up which will be retrieved by response as though it was real
+        # try changing the response code to something other than 200 to test out that part of the code
+        responses.add(responses.GET, 'http://' + rest_cmd,
+                      json=json_mock,
+                      status=200)
+        response = requests.get('http://' + rest_cmd)
+
     if response.status_code != 200:
         # this test should fail if any other response code received
         tc.fail('expected 200-OK actual response was ' + str(response.status_code))
