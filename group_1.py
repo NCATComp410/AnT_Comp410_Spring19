@@ -20,7 +20,7 @@ pp = pprint.PrettyPrinter(indent=4)
 # for maintenance and you will want to make progress on your code.
 # They are also useful for simulating some responses which cannot be easily
 # created using the real system - such as error conditions.
-use_mock = True
+use_mock = False
 
 # Add ability to fall-back to older API
 use_intent = True
@@ -32,7 +32,7 @@ else:
 
 # Uncomment this line to use the mock this will essentially hi-jack normal requests
 #library and allow us to insert our own mocked-up responses.
-@responses.activate
+# @responses.activate
 
 # This is a basic test case template included in each team's
 # source code file.  Use this function as a template to build
@@ -79,21 +79,41 @@ def tc_dna_intent_api_vi_topology_l2_vlan():
     # create this test case
     tc = TestCase(test_name='IntentApiV1TopologyL2Vlan', yaml_file='params.yaml')
 
-    # create a session to the DNA-C
-    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
-                     port=tc.params['DnaCenter']['Port'],
-                     username=tc.params['DnaCenter']['Username'],
-                     password=tc.params['DnaCenter']['Password'])
+    # REST API command to be executed
+    rest_cmd = intent_api + 'api/v1/topology/vlan/vlan-names'
 
-    # find available vlan names
-    response = dnac.get('dna/intent/api/v1/topology/vlan/vlan-names')
+    if not use_mock:
+        # create a session to the DNA-C
+        dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                         port=tc.params['DnaCenter']['Port'],
+                         username=tc.params['DnaCenter']['Username'],
+                         password=tc.params['DnaCenter']['Password'])
+
+        # find available vlan names
+        response = dnac.get(rest_cmd)
+
+    else:
+        json_mock = {'response': ['Vlan1'], 'version': '1.0'}
+        responses.add(responses.GET, 'http://' + rest_cmd,
+                      json=json_mock,
+                      status=200)
+        response = requests.get('http://' + rest_cmd)
+
     if response.status_code != 200:
         # this test should fail if any other response code received
         tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
 
     # get additional information about each vlan
     for vlan_name in response.json()['response']:
-        response = dnac.get('dna/intent/api/v1/topology/l2/' + vlan_name)
+        rest_cmd = intent_api + 'api/v1/topology/l2/Vlan1'
+        if not use_mock:
+            response = dnac.get(rest_cmd)
+        else:
+            json_mock = {'response': {'nodes': [{'deviceType': 'Cisco ASR 1001-X Router', 'label': 'asr1001-x.abc.inc', 'ip': '10.10.22.253', 'softwareVersion': '16.3.2', 'greyOut': True, 'nodeType': 'device', 'family': 'Routers', 'platformId': 'ASR1001-X', 'tags': [], 'role': 'BORDER ROUTER', 'roleSource': 'AUTO', 'customParam': {}, 'additionalInfo': {'macAddress': '00:c8:8b:80:bb:00', 'latitude': '', 'siteid': '80023cfe-7ae1-4c71-9f41-7602fec88f9a', 'fabricRoles': ['BORDER', 'MAPSERVER', 'INTERMEDIATE'], 'longitude': ''}, 'id': '1904ca0d-01be-4d13-88e5-4f4f9980b512'}, {'deviceType': 'Cisco Catalyst 9300 Switch', 'label': 'cat_9k_1.marius.x-trem.ro', 'ip': '10.10.22.66', 'softwareVersion': '16.6.1', 'nodeType': 'device', 'family': 'Switches and Hubs', 'platformId': 'C9300-24UX', 'tags': [], 'role': 'ACCESS', 'roleSource': 'AUTO', 'customParam': {}, 'additionalInfo': {'macAddress': 'f8:7b:20:67:62:80', 'latitude': '', 'siteid': '80023cfe-7ae1-4c71-9f41-7602fec88f9a', 'longitude': ''}, 'id': '1a85db61-8bf2-4717-9060-9776f42e4581'}, {'deviceType': 'Cisco Catalyst 9300 Switch', 'label': 'cat_9k_2.marius.x-trem.ro', 'ip': '10.10.22.70', 'softwareVersion': '16.6.4a', 'nodeType': 'device', 'family': 'Switches and Hubs', 'platformId': 'C9300-24UX', 'tags': [], 'role': 'ACCESS', 'roleSource': 'AUTO', 'customParam': {}, 'additionalInfo': {'macAddress': 'f8:7b:20:71:4d:80', 'latitude': '', 'siteid': '80023cfe-7ae1-4c71-9f41-7602fec88f9a', 'longitude': ''}, 'id': '2800864b-78ff-4bfd-9a60-83364d35c197'}, {'deviceType': 'Cisco Catalyst38xx stack-able ethernet switch', 'label': 'cs3850.marius.x-trem.ro', 'ip': '10.10.22.73', 'softwareVersion': '16.6.2s', 'nodeType': 'device', 'family': 'Switches and Hubs', 'platformId': 'WS-C3850-48U-E', 'tags': [], 'role': 'DISTRIBUTION', 'roleSource': 'AUTO', 'customParam': {}, 'additionalInfo': {'macAddress': 'cc:d8:c1:15:d2:80', 'latitude': '', 'siteid': '80023cfe-7ae1-4c71-9f41-7602fec88f9a', 'fabricRoles': ['EDGE', 'BORDER', 'MAPSERVER', 'INTERMEDIATE'], 'longitude': ''}, 'id': '79d3a90b-1b95-4cd8-a9bd-6d5952814432'}, {'deviceType': 'wired', 'label': '10.10.22.98', 'ip': '10.10.22.98', 'greyOut': True, 'nodeType': 'HOST', 'family': 'WIRED', 'role': 'HOST', 'customParam': {}, 'additionalInfo': {'macAddress': 'c8:4c:75:68:b2:c0'}, 'id': 'a6fb899d-acd2-47ca-90e6-063e82086a05'}, {'deviceType': 'wired', 'label': '10.10.22.114', 'ip': '10.10.22.114', 'greyOut': True, 'nodeType': 'HOST', 'family': 'WIRED', 'role': 'HOST', 'customParam': {}, 'additionalInfo': {'macAddress': '00:1e:13:a5:b9:40'}, 'id': 'ff8a838d-fb47-40d7-8a57-7a5189ceb185'}, {'deviceType': 'cloud node', 'label': 'cloud node', 'ip': 'UNKNOWN', 'softwareVersion': 'UNKNOWN', 'greyOut': True, 'nodeType': 'cloud node', 'family': 'cloud node', 'platformId': 'UNKNOWN', 'tags': ['cloud node'], 'role': 'cloud node', 'roleSource': 'AUTO', 'customParam': {}, 'id': '0c8414c1-e2f5-4e72-97ec-3e99188eb47e'}], 'links': [{'source': '1a85db61-8bf2-4717-9060-9776f42e4581', 'startPortID': '8352aa72-4851-4023-a765-d07004f6e524', 'startPortName': 'TenGigabitEthernet1/1/1', 'startPortIpv4Address': '10.10.22.66', 'startPortIpv4Mask': '255.255.255.252', 'startPortSpeed': '10000000', 'target': '79d3a90b-1b95-4cd8-a9bd-6d5952814432', 'endPortID': '36002b06-ae27-413c-9b36-ee1195e5af02', 'endPortName': 'TenGigabitEthernet1/1/2', 'endPortIpv4Address': '10.10.22.65', 'endPortIpv4Mask': '255.255.255.252', 'endPortSpeed': '10000000', 'linkStatus': 'up', 'greyOut': True, 'additionalInfo': {}, 'id': '409414'}, {'source': '2800864b-78ff-4bfd-9a60-83364d35c197', 'startPortID': 'dc03baa0-8a80-406d-99ec-c94d6b33b35a', 'startPortName': 'TenGigabitEthernet1/1/1', 'startPortIpv4Address': '10.10.22.70', 'startPortIpv4Mask': '255.255.255.252', 'startPortSpeed': '10000000', 'target': '79d3a90b-1b95-4cd8-a9bd-6d5952814432', 'endPortID': 'd336120c-e616-462d-8053-210ff653da79', 'endPortName': 'TenGigabitEthernet1/1/3', 'endPortIpv4Address': '10.10.22.69', 'endPortIpv4Mask': '255.255.255.252', 'endPortSpeed': '10000000', 'linkStatus': 'up', 'greyOut': True, 'additionalInfo': {}, 'id': '409413'}, {'source': '1904ca0d-01be-4d13-88e5-4f4f9980b512', 'startPortID': '5891c30f-af17-4c04-8101-8dbb76ad770e', 'startPortName': 'TenGigabitEthernet0/0/1', 'startPortIpv4Address': '10.10.22.74', 'startPortIpv4Mask': '255.255.255.252', 'startPortSpeed': '10000000', 'target': '79d3a90b-1b95-4cd8-a9bd-6d5952814432', 'endPortID': 'afea66a1-8d56-4897-b1a9-5349e513602c', 'endPortName': 'TenGigabitEthernet1/1/1', 'endPortIpv4Address': '10.10.22.73', 'endPortIpv4Mask': '255.255.255.252', 'endPortSpeed': '10000000', 'linkStatus': 'up', 'greyOut': True, 'additionalInfo': {}, 'id': '409415'}, {'source': '1a85db61-8bf2-4717-9060-9776f42e4581', 'startPortID': '92b04d61-fb13-432b-aade-b760929b3ff3', 'target': 'a6fb899d-acd2-47ca-90e6-063e82086a05', 'linkStatus': 'UP', 'greyOut': True, 'additionalInfo': {}}, {'source': '2800864b-78ff-4bfd-9a60-83364d35c197', 'startPortID': '48a8c168-d850-4493-981b-feef4e471847', 'target': 'ff8a838d-fb47-40d7-8a57-7a5189ceb185', 'linkStatus': 'UP', 'greyOut': True, 'additionalInfo': {}}, {'source': '0c8414c1-e2f5-4e72-97ec-3e99188eb47e', 'target': '1904ca0d-01be-4d13-88e5-4f4f9980b512', 'linkStatus': 'up', 'greyOut': True}]}, 'version': '1.0'}
+            responses.add(responses.GET, 'http://' + rest_cmd,
+                          json=json_mock,
+                          status=200)
+            response = requests.get('http://' + rest_cmd)
         if response.status_code != 200:
             # this test should fail if any other response code received
             tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
@@ -118,7 +138,7 @@ def tc_dna_intent_api_vi_topology_site_topology():
                 password=tc.params['DnaCenter']['Password'])
 
     # get site topology
-         response = dnac.get('dna/intent/api/v1/topology/site-topology')
+         response = dnac.get(rest_cmd)
     # The json_mock is something which was saved in responses.log during a successful session
     else:
         json_mock = {'response': {
@@ -314,10 +334,10 @@ def tc_dna_intent_api_vi_topology_site_topology():
                    'displayName': '437455',
                    'groupNameHierarchy': 'Global/Atlanta/Corporate/Floor 2'}]},
         'version': '1.0'}
-    responses.add(responses.GET, 'http://' + rest_cmd,
+        responses.add(responses.GET, 'http://' + rest_cmd,
                   json=json_mock,
                   status=200)
-    response = requests.get('http://' + rest_cmd)
+        response = requests.get('http://' + rest_cmd)
 
     # Check to see if a response other than 200-OK was received
     if response.status_code != 200:
