@@ -28,11 +28,11 @@ else:
 # for maintenance and you will want to make progress on your code.
 # They are also useful for simulating some responses which cannot be easily
 # created using the real system - such as error conditions.
-use_mock = True
+use_mock = False
 
 # Uncomment this line to use the mock this will essentially hi-jack normal requests
 # library and allow us to insert our own mocked-up responses.
-@responses.activate
+# @responses.activate
 
 
 def tc_dna_intent_api_v1_network_device():
@@ -150,6 +150,24 @@ def tc_dna_intent_api_v1_network_device():
     print(','.join(host_list))
     print('Serial Numbers:')
     pp.pprint(serialNumber_list)
+
+    # sprint #3 example
+    # Get a list of available fields from the response for each device
+    check_fields = True
+    expected_fields = ['type', 'errorCode', 'family', 'location', 'role', 'errorDescription', 'lastUpdateTime', 'lastUpdated', 'tagCount', 'inventoryStatusDetail', 'macAddress', 'hostname', 'serialNumber', 'softwareVersion', 'locationName', 'upTime', 'softwareType', 'collectionInterval', 'roleSource', 'apManagerInterfaceIp', 'associatedWlcIp', 'bootDateTime', 'collectionStatus', 'interfaceCount', 'lineCardCount', 'lineCardId', 'managementIpAddress', 'memorySize', 'platformId', 'reachabilityFailureReason', 'reachabilityStatus', 'series', 'snmpContact', 'snmpLocation', 'tunnelUdpPort', 'waasDeviceMode', 'instanceUuid', 'instanceTenantId', 'id']
+    for device in response.json()['response']:
+        device_fields = device.keys()
+        for field in expected_fields:
+            if field not in device_fields:
+                tc.fail(device['hostname'] + ':' + field + ' was expected but not found in the DNA-C results')
+                check_fields = False
+            else:
+                tc.okay(device['hostname'] + ':Found expected field:' + field)
+
+    # If all fields checked out OK
+    if check_fields:
+        tc.okay('all expected device fields were found')
+
 
     # The host list has changed frequently in the sandbox which makes maintaining
     # this test step unrealistic, so, commenting it out for now
