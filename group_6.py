@@ -1,6 +1,8 @@
-from utils import DnaCenter
+gifrom utils import DnaCenter
 from utils import TestCase
 import pprint
+import responses
+import requests
 
 # define a pretty-printer for diagnostics
 pp = pprint.PrettyPrinter(indent=4)
@@ -8,6 +10,8 @@ pp = pprint.PrettyPrinter(indent=4)
 # This is a basic test case template included in each team's
 # source code file.  Use this function as a template to build
 # additional test cases
+
+use_mock = False
 def tc_dna_intent_api_v1_network_device_count():
     # create this test case
     tc = TestCase(test_name='IntentApiV1NetworkDeviceCount', yaml_file='params.yaml')
@@ -44,21 +48,43 @@ def tc_dna_intent_api_v1_network_device_count():
         else:
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
+use_intent = True
+
+if use_intent:
+    intent_api = 'dna/intent/'
+else:
+    intent_api = ''
+
+use_mock = True
+@responses.activate
 
 # dna/intent/api/v1/file/namespace
+#kelvin ogachi
 def tc_dna_intent_api_v1_file_namespace():
     # create this test case
     tc = TestCase(test_name='IntentApiV1FileNamespace', yaml_file='params.yaml')
 
+    rest_cmd = 'dna/intent/api/v1/namespace'
+    if not use_mock:
     # create a session to the DNA-C
-    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+        dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
                      port=tc.params['DnaCenter']['Port'],
 
                      username=tc.params['DnaCenter']['Username'],
                      password=tc.params['DnaCenter']['Password'])
 
     # execute the command and get response
-    response = dnac.get('dna/intent/api/v1/file/namespace')
+        response = dnac.get(rest_cmd)
+    else:
+        json_mock = {'response': 4, 'version': '1.0'}
+
+        responses.add(responses.GET, 'http://' + rest_cmd,
+                  json=json_mock,
+                  status=200)
+
+
+        response = requests.get('http://' + rest_cmd)
+
     #pp.pprint(response.json())
     if response.status_code==200:
         print("IT WORKS ")
@@ -66,6 +92,8 @@ def tc_dna_intent_api_v1_file_namespace():
         print("IT DOES NOT WORK")
     # complete
     tc.okay('complete')
+
+
 
 
 def tc_dna_intent_api_v1_file_namespace_network_device_export():

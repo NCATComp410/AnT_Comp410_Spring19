@@ -1,0 +1,35 @@
+<<<<<<< HEAD
+=======
+2019-02-13T12:34:14.410750
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/network-device/count
+<Response [200]>
+{'response': 3, 'version': '1.0'}
+2019-02-13T12:34:15.181276
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/file/namespace
+<Response [200]>
+{'response': ['group_export', 'auditlogs', 'ivm-kgv', 'network_device_export', 'pki-trustpool', '/tmp/spf-cli-preview', 'config', 'swimfiles', 'ejbca', 'command-runner', 'nvsfiles'], 'version': '1.0'}
+2019-02-15T12:45:53.206914
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/network-device/count
+<Response [200]>
+{'response': 3, 'version': '1.0'}
+2019-02-15T12:45:54.645218
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/file/namespace
+<Response [200]>
+{'response': ['group_export', 'auditlogs', 'ivm-kgv', 'network_device_export', 'pki-trustpool', '/tmp/spf-cli-preview', 'config', 'swimfiles', 'ejbca', 'command-runner', 'nvsfiles'], 'version': '1.0'}
+2019-02-15T12:46:22.514363
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/network-device/count
+<Response [200]>
+{'response': 3, 'version': '1.0'}
+2019-02-15T12:46:23.660734
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/file/namespace
+<Response [200]>
+{'response': ['group_export', 'auditlogs', 'ivm-kgv', 'network_device_export', 'pki-trustpool', '/tmp/spf-cli-preview', 'config', 'swimfiles', 'ejbca', 'command-runner', 'nvsfiles'], 'version': '1.0'}
+2019-02-15T20:32:11.376114
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/network-device/count
+<Response [200]>
+{'response': 3, 'version': '1.0'}
+2019-02-15T20:32:12.563495
+https://sandboxdnac.cisco.com:443/dna/intent/api/v1/file/namespace
+<Response [200]>
+{'response': ['group_export', 'auditlogs', 'ivm-kgv', 'network_device_export', 'pki-trustpool', '/tmp/spf-cli-preview', 'config', 'swimfiles', 'ejbca', 'command-runner', 'nvsfiles'], 'version': '1.0'}
+>>>>>>> 2069dcb43e3567cc38f9d17e0c8edcefa209897c
