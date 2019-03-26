@@ -20,7 +20,7 @@ pp = pprint.PrettyPrinter(indent=4)
 # for maintenance and you will want to make progress on your code.
 # They are also useful for simulating some responses which cannot be easily
 # created using the real system - such as error conditions.
-use_mock = False
+use_mock = True
 
 # Add ability to fall-back to older API
 use_intent = True
@@ -29,10 +29,6 @@ if use_intent:
     intent_api = 'dna/intent/'
 else:
     intent_api = ''
-
-# Uncomment this line to use the mock this will essentially hi-jack normal requests
-#library and allow us to insert our own mocked-up responses.
-# @responses.activate
 
 # This is a basic test case template included in each team's
 # source code file.  Use this function as a template to build
@@ -74,7 +70,9 @@ def tc_dna_intent_api_v1_network_device_count():
         else:
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
-
+# Uncomment this line to use the mock this will essentially hi-jack normal requests
+# library and allow us to insert our own mocked-up responses.
+@responses.activate
 def tc_dna_intent_api_vi_topology_l2_vlan():
     # create this test case
     tc = TestCase(test_name='IntentApiV1TopologyL2Vlan', yaml_file='params.yaml')
@@ -123,7 +121,9 @@ def tc_dna_intent_api_vi_topology_l2_vlan():
     # test complete
     tc.okay('complete')
 
-
+# Uncomment this line to use the mock this will essentially hi-jack normal requests
+# library and allow us to insert our own mocked-up responses.
+@responses.activate
 def tc_dna_intent_api_vi_topology_site_topology():
     # create this test case
     tc = TestCase(test_name='IntentApiV1SiteTopology', yaml_file='params.yaml')
@@ -357,7 +357,9 @@ def tc_dna_intent_api_vi_topology_site_topology():
     # test complete
     tc.okay('complete')
 
-
+# Uncomment this line to use the mock this will essentially hi-jack normal requests
+# library and allow us to insert our own mocked-up responses.
+@responses.activate
 def tc_dna_intent_api_vi_topology_physical_topology():
     # create this test case
     tc = TestCase(test_name='IntentApiV1PhysicalTopology', yaml_file='params.yaml')
