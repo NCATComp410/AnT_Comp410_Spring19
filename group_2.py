@@ -20,7 +20,7 @@ pp = pprint.PrettyPrinter(indent=4)
 # for maintenance and you will want to make progress on your code.
 # They are also useful for simulating some responses which cannot be easily
 # created using the real system - such as error conditions.
-use_mock = False
+use_mock = True
 
 # Add ability to fall-back to older API
 use_intent = True
@@ -70,7 +70,7 @@ def tc_dna_intent_api_v1_network_device_count():
         else:
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
-
+# @responses.activate
 def tc_dna_intent_api_v1_topology_l3_ospf():
     # Jakeem Cofield
     # create this test case
@@ -97,7 +97,7 @@ def tc_dna_intent_api_v1_topology_l3_ospf():
     # complete
     tc.okay('complete')
 
-
+@responses.activate
 def tc_dna_intent_api_v1_topology_l3_isis():
     #Alexis Cooper
     # create this test case
@@ -143,7 +143,7 @@ def tc_dna_intent_api_v1_topology_l3_isis():
     # complete
     tc.okay('complete')
 
-
+@responses.activate
 def tc_dna_intent_api_v1_topology_l3_static():
     # create this test case
     # Anthony Garcia
@@ -189,7 +189,7 @@ def run_all_tests():
 
     # add new test cases to be run here
     #tc_dna_intent_api_v1_topology_l3_ospf()
-    #tc_dna_intent_api_v1_topology_l3_isis()
+    tc_dna_intent_api_v1_topology_l3_isis()
     tc_dna_intent_api_v1_topology_l3_static()
 
 
