@@ -30,10 +30,6 @@ if use_intent:
 else:
     intent_api = ''
 
-# Uncomment this line to use the mock this will essentially hi-jack normal requests
-#library and allow us to insert our own mocked-up responses.
-# @responses.activate
-
 # This is a basic test case template included in each team's
 # source code file.  Use this function as a template to build
 # additional test cases
@@ -74,7 +70,9 @@ def tc_dna_intent_api_v1_network_device_count():
         else:
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
-
+# Uncomment this line to use the mock this will essentially hi-jack normal requests
+# library and allow us to insert our own mocked-up responses.
+# @responses.activate
 def tc_dna_intent_api_vi_topology_l2_vlan():
     # create this test case
     tc = TestCase(test_name='IntentApiV1TopologyL2Vlan', yaml_file='params.yaml')
@@ -123,7 +121,9 @@ def tc_dna_intent_api_vi_topology_l2_vlan():
     # test complete
     tc.okay('complete')
 
-
+# Uncomment this line to use the mock this will essentially hi-jack normal requests
+# library and allow us to insert our own mocked-up responses.
+# @responses.activate
 def tc_dna_intent_api_vi_topology_site_topology():
     # create this test case
     tc = TestCase(test_name='IntentApiV1SiteTopology', yaml_file='params.yaml')
@@ -357,7 +357,9 @@ def tc_dna_intent_api_vi_topology_site_topology():
     # test complete
     tc.okay('complete')
 
-
+# Uncomment this line to use the mock this will essentially hi-jack normal requests
+# library and allow us to insert our own mocked-up responses.
+# @responses.activate
 def tc_dna_intent_api_vi_topology_physical_topology():
     # create this test case
     tc = TestCase(test_name='IntentApiV1PhysicalTopology', yaml_file='params.yaml')
@@ -528,6 +530,28 @@ def tc_dna_intent_api_vi_topology_physical_topology():
         tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
     else:
         pp.pprint(response.json())
+        
+    # BEGIN COPIED CODE FROM SAMPLE
+    # Get a list of available fields from the response for each device
+    check_fields = True
+    expected_node_fields = ['deviceType', 'label', 'ip', 'softwareVersion', 'nodeType', 'family', 'platformId',
+                                'tags', 'role', 'roleSource', 'customParam', 'additionalInfo', 'id']
+    # TODO: Change this to check the nodes against the field above
+    for device in response.json()['response']:
+        device_fields = device.keys()
+        for field in expected_fields:
+            if field not in device_fields:
+                tc.fail(device['hostname'] + ':' + field + ' was expected but not found in the DNA-C results')
+                check_fields = False
+            else:
+                tc.okay(device['hostname'] + ':Found expected field:' + field)
+
+    # TODO: Repeat the above check for the link field
+
+    # If all fields checked out OK
+    if check_fields:
+        tc.okay('all expected device fields were found')
+    # END COPIED CODE
 
     # test complete
     tc.okay('complete')
