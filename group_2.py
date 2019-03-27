@@ -20,7 +20,7 @@ pp = pprint.PrettyPrinter(indent=4)
 # for maintenance and you will want to make progress on your code.
 # They are also useful for simulating some responses which cannot be easily
 # created using the real system - such as error conditions.
-use_mock = True
+use_mock = False
 
 # Add ability to fall-back to older API
 use_intent = True
@@ -97,7 +97,7 @@ def tc_dna_intent_api_v1_topology_l3_ospf():
     # complete
     tc.okay('complete')
 
-@responses.activate
+# @responses.activate
 def tc_dna_intent_api_v1_topology_l3_isis():
     #Alexis Cooper
     # create this test case
@@ -143,7 +143,7 @@ def tc_dna_intent_api_v1_topology_l3_isis():
     # complete
     tc.okay('complete')
 
-@responses.activate
+# @responses.activate
 def tc_dna_intent_api_v1_topology_l3_static():
     # create this test case
     # Anthony Garcia
@@ -164,7 +164,8 @@ def tc_dna_intent_api_v1_topology_l3_static():
         response = dnac.get(rest_cmd)
     # If using mock, create JSON response and create response
     else:
-        json_mock = {'response': {'nodes': [{'deviceType': 'Cisco Catalyst 9300 Switch', 'label': 'cat_9k_2.domain.net', 'ip': '10.10.22.70', 'softwareVersion': '16.6.1', 'greyOut': True, 'nodeType': 'device', 'family': 'Switches and Hubs', 'platformId': 'C9300-24UX', 'tags': [], 'role': 'BORDER ROUTER', 'roleSource': 'MANUAL', 'customParam': {}, 'additionalInfo': {'macAddress': 'f8:7b:20:71:4d:80', 'latitude': '51.517954', 'siteid': '3c6fdc72-c755-45c8-a032-99ee3ce60fe9', 'longitude': '-0.085751'}, 'id': '3a909883-948f-47c2-8e34-65a740ab423e'}, {'deviceType': 'Cisco Catalyst 9300 Switch', 'label': 'cat_9k_1.domain.net', 'ip': '10.10.22.66', 'softwareVersion': '16.6.1', 'greyOut': True, 'nodeType': 'device', 'family': 'Switches and Hubs', 'platformId': 'C9300-24UX', 'tags': [], 'role': 'ACCESS', 'roleSource': 'AUTO', 'customParam': {}, 'additionalInfo': {'macAddress': 'f8:7b:20:67:62:80', 'latitude': '51.517954', 'siteid': '3c6fdc72-c755-45c8-a032-99ee3ce60fe9', 'longitude': '-0.085751'}, 'id': 'f783741b-3f09-432a-95d5-77ad2ed18518'}, {'deviceType': 'wired', 'label': '10.10.22.114', 'ip': '10.10.22.114', 'greyOut': True, 'nodeType': 'HOST', 'family': 'WIRED', 'role': 'HOST', 'customParam': {}, 'additionalInfo': {'macAddress': '00:1e:13:a5:b9:40'}, 'id': '47140091-fa69-4b40-9731-4fc825380d5b'}, {'deviceType': 'wired', 'label': '10.10.22.98', 'ip': '10.10.22.98', 'greyOut': True, 'nodeType': 'HOST', 'family': 'WIRED', 'role': 'HOST', 'customParam': {}, 'additionalInfo': {'macAddress': 'c8:4c:75:68:b2:c0'}, 'id': 'e3ee7a1f-7cd7-40e4-a354-65a345842e4d'}, {'deviceType': 'cloud node', 'label': 'cloud node', 'ip': 'UNKNOWN', 'softwareVersion': 'UNKNOWN', 'greyOut': True, 'nodeType': 'cloud node', 'family': 'cloud node', 'platformId': 'UNKNOWN', 'tags': ['cloud node'], 'role': 'cloud node', 'roleSource': 'AUTO', 'customParam': {}, 'id': 'a9424d4f-d19c-42c0-8ab6-a95a43008bb4'}], 'links': [{'source': '3a909883-948f-47c2-8e34-65a740ab423e', 'startPortID': '5453c235-3a1d-4d6f-83bc-5d7c61ebf38a', 'target': '47140091-fa69-4b40-9731-4fc825380d5b', 'linkStatus': 'UP', 'greyOut': True, 'additionalInfo': {}}, {'source': 'f783741b-3f09-432a-95d5-77ad2ed18518', 'startPortID': 'ae285f42-2ac1-49cf-a4c1-b2a3e81e442b', 'target': 'e3ee7a1f-7cd7-40e4-a354-65a345842e4d', 'linkStatus': 'UP', 'greyOut': True, 'additionalInfo': {}}, {'source': 'a9424d4f-d19c-42c0-8ab6-a95a43008bb4', 'target': '3a909883-948f-47c2-8e34-65a740ab423e', 'linkStatus': 'up', 'greyOut': True}]}, 'version': '1.0'}
+        # json_mock = {'response': {'nodes': [{'deviceType': 'Cisco Catalyst 9300 Switch', 'label': 'cat_9k_2.domain.net', 'ip': '10.10.22.70', 'softwareVersion': '16.6.1', 'greyOut': True, 'nodeType': 'device', 'family': 'Switches and Hubs', 'platformId': 'C9300-24UX', 'tags': [], 'role': 'BORDER ROUTER', 'roleSource': 'MANUAL', 'customParam': {}, 'additionalInfo': {'macAddress': 'f8:7b:20:71:4d:80', 'latitude': '51.517954', 'siteid': '3c6fdc72-c755-45c8-a032-99ee3ce60fe9', 'longitude': '-0.085751'}, 'id': '3a909883-948f-47c2-8e34-65a740ab423e'}, {'deviceType': 'Cisco Catalyst 9300 Switch', 'label': 'cat_9k_1.domain.net', 'ip': '10.10.22.66', 'softwareVersion': '16.6.1', 'greyOut': True, 'nodeType': 'device', 'family': 'Switches and Hubs', 'platformId': 'C9300-24UX', 'tags': [], 'role': 'ACCESS', 'roleSource': 'AUTO', 'customParam': {}, 'additionalInfo': {'macAddress': 'f8:7b:20:67:62:80', 'latitude': '51.517954', 'siteid': '3c6fdc72-c755-45c8-a032-99ee3ce60fe9', 'longitude': '-0.085751'}, 'id': 'f783741b-3f09-432a-95d5-77ad2ed18518'}, {'deviceType': 'wired', 'label': '10.10.22.114', 'ip': '10.10.22.114', 'greyOut': True, 'nodeType': 'HOST', 'family': 'WIRED', 'role': 'HOST', 'customParam': {}, 'additionalInfo': {'macAddress': '00:1e:13:a5:b9:40'}, 'id': '47140091-fa69-4b40-9731-4fc825380d5b'}, {'deviceType': 'wired', 'label': '10.10.22.98', 'ip': '10.10.22.98', 'greyOut': True, 'nodeType': 'HOST', 'family': 'WIRED', 'role': 'HOST', 'customParam': {}, 'additionalInfo': {'macAddress': 'c8:4c:75:68:b2:c0'}, 'id': 'e3ee7a1f-7cd7-40e4-a354-65a345842e4d'}, {'deviceType': 'cloud node', 'label': 'cloud node', 'ip': 'UNKNOWN', 'softwareVersion': 'UNKNOWN', 'greyOut': True, 'nodeType': 'cloud node', 'family': 'cloud node', 'platformId': 'UNKNOWN', 'tags': ['cloud node'], 'role': 'cloud node', 'roleSource': 'AUTO', 'customParam': {}, 'id': 'a9424d4f-d19c-42c0-8ab6-a95a43008bb4'}], 'links': [{'source': '3a909883-948f-47c2-8e34-65a740ab423e', 'startPortID': '5453c235-3a1d-4d6f-83bc-5d7c61ebf38a', 'target': '47140091-fa69-4b40-9731-4fc825380d5b', 'linkStatus': 'UP', 'greyOut': True, 'additionalInfo': {}}, {'source': 'f783741b-3f09-432a-95d5-77ad2ed18518', 'startPortID': 'ae285f42-2ac1-49cf-a4c1-b2a3e81e442b', 'target': 'e3ee7a1f-7cd7-40e4-a354-65a345842e4d', 'linkStatus': 'UP', 'greyOut': True, 'additionalInfo': {}}, {'source': 'a9424d4f-d19c-42c0-8ab6-a95a43008bb4', 'target': '3a909883-948f-47c2-8e34-65a740ab423e', 'linkStatus': 'up', 'greyOut': True}]}, 'version': '1.0'}
+        json_mock = {'response': 4, 'version': '1.0'}
 
 
         responses.add(responses.GET, 'http://' + rest_cmd,
@@ -177,7 +178,14 @@ def tc_dna_intent_api_v1_topology_l3_static():
         # this test should fail if any other response code received
         tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
     else:
-        pp.pprint(response.json())
+        if not use_mock:
+            pp.pprint(response.json())
+        else:
+            if 'version' in response.json():
+                if(response.json()['version']=="1.0"):
+                    pp.pprint(response.json())
+                else:
+                    print("Incorrect version")
 
         # test complete
     tc.okay('complete')
@@ -189,7 +197,7 @@ def run_all_tests():
 
     # add new test cases to be run here
     #tc_dna_intent_api_v1_topology_l3_ospf()
-    tc_dna_intent_api_v1_topology_l3_isis()
+    #tc_dna_intent_api_v1_topology_l3_isis()
     tc_dna_intent_api_v1_topology_l3_static()
 
 
