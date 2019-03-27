@@ -145,8 +145,7 @@ def tc_dna_intent_api_vi_topology_site_topology():
             'sites': [{'id': '21b35880-e95b-4a4e-a9a0-d1944b9fd89f','name': 'Area01',
                        'parentId': '574acdc5-1cf8-41e9-9df4-eb91940e30a9',
                        'latitude': '', 'longitude': '',
-                       'locationType':
-                       'area',
+                       'locationType':'area',
                        'locationAddress': '',
                        'locationCountry': '',
                        'displayName': '437439',
@@ -353,6 +352,35 @@ def tc_dna_intent_api_vi_topology_site_topology():
             if not site['locationCountry'] in country_list:
                 country_list.append(site['locationCountry'])
     tc.okay('countries found:' + ','.join(country_list))
+
+    # Get a list of available fields from the response for each device
+    check_fields = True
+    expected_site_fields =['id', 'name', 'parentId', 'latitude','longitude', 'locationType',
+                   'locationAddress','locationCountry', 'displayName', 'groupNameHierarchy' ]
+
+    # Check that all expected fields for a node are present
+    data = response.json()['response']
+    for site in data['sites']:
+        site_fields = site.keys()
+        for field in expected_site_fields:
+            if field not in site_fields:
+                tc.fail(site['locationCountry'] + ':' + field + ' was expected but not found in the DNA-C results')
+                check_fields = False
+            else:
+                tc.okay(site['locationCountry'] + ':Found expected field:' + field)
+
+                # Check if the response has an API version field
+                if 'version' in response.json():
+                    tc.okay('found expected field version')
+                else:
+                    pp.pprint('version field was expected but not found in the DNA-C results')
+                    check_fields = False
+
+                # If all fields checked out OK
+                if check_fields:
+                    tc.okay('all expected device fields were found')
+                else:
+                    tc.fail('all expected device fields not found')
 
     # test complete
     tc.okay('complete')
