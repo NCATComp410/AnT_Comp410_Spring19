@@ -536,21 +536,36 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     check_fields = True
     expected_node_fields = ['deviceType', 'label', 'ip', 'softwareVersion', 'nodeType', 'family', 'platformId',
                                 'tags', 'role', 'roleSource', 'customParam', 'additionalInfo', 'id']
-    # TODO: Change this to check the nodes against the field above
-    for device in response.json()['response']:
-        device_fields = device.keys()
-        for field in expected_fields:
-            if field not in device_fields:
-                tc.fail(device['hostname'] + ':' + field + ' was expected but not found in the DNA-C results')
+    # Check that all expected fields for a node are present
+    data = response.json()['response']
+    for node in data['nodes']:
+        node_fields = node.keys()
+        for field in expected_node_fields:
+            if field not in node_fields:
+                tc.fail(node['label'] + ':' + field + ' was expected but not found in the DNA-C results')
                 check_fields = False
             else:
-                tc.okay(device['hostname'] + ':Found expected field:' + field)
+                tc.okay(node['label'] + ':Found expected field:' + field)
 
-    # TODO: Repeat the above check for the link field
+    expected_link_fields = ['source', 'startPortID', 'startPortName', 'startPortIpv4Address', 'startPortIpv4Mask', 'startPortSpeed', 
+            'target', 'endPortID', 'endPortName', 'endPortIpv4Address', 'endPortIpv4Mask', 'endPortSpeed', 'linkStatus', 'additionalInfo', 'id']
+    
+    # Check that all expected fields for a link are present
+    for link in data['links']:
+    	link_fields = link.keys()
+    	for field in expected_link_fields:
+    		if field not in link_fields:
+    			tc.fail(link['source'] + ':' + field + ' was expected but not found in the DNA-C results')
+    			check_fields = False
+    		else:
+    			tc.okay(link['source'] + ':Found expected field:' + field)
+    		
 
     # If all fields checked out OK
     if check_fields:
         tc.okay('all expected device fields were found')
+    else:
+        tc.fail('all expected device fields not found')
     # END COPIED CODE
 
     # test complete
