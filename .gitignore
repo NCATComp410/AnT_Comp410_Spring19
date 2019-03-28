@@ -3,3 +3,4 @@
 .pytest_cache
 response.log
 __pycache__
+.DS_Store

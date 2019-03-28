@@ -32,6 +32,7 @@ use_mock = False
 
 # Uncomment this line to use the mock this will essentially hi-jack normal requests
 # library and allow us to insert our own mocked-up responses.
+# THIS APPLIES TO THE NEXT FUNCTION - it will only hijack request/responses for the next function
 # @responses.activate
 
 

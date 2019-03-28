@@ -58,14 +58,14 @@ def get_unique_device_id(dnac):
             device_list.append(device['id'])
     return device_list
 
-use_intent = True
+use_intent = False
 if use_intent:
     intent_api = 'dna/intent/'
 else:
     intent_api = ''
 
-use_mock = True
-@responses.activate
+use_mock = False
+#@responses.activate
 
 # dna/intent/api/v1/network-device/config
 def tc_dna_intent_api_v1_network_device_config():
@@ -73,14 +73,14 @@ def tc_dna_intent_api_v1_network_device_config():
  tc = TestCase(test_name='IntentApiV1NetworkDeviceConfig', yaml_file='params.yaml')
  response = None
  if not use_mock :
-     # create a session to the DNA-C
+    # create a session to the DNA-C
     dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
                      port=tc.params['DnaCenter']['Port'],
                      username=tc.params['DnaCenter']['Username'],
                      password=tc.params['DnaCenter']['Password'])
-
     response = dnac.get('dna/intent/api/v1/network-device/config')
     print("dnac in use")
+
  else:
     print("dnac not in use")
     #json_mock ={'response': 4, 'version': '1.0'}
@@ -156,6 +156,33 @@ def tc_dna_intent_api_v1_network_device_config():
     response = requests.get('http://' + rest_cmd)
 
 
+ # sprint #3 example
+ # Get a list of available fields from the response for each device
+ check_fields = True
+ expected_fields = ['type', 'errorCode', 'family', 'location', 'role', 'errorDescription', 'lastUpdateTime',
+                        'lastUpdated', 'tagCount', 'inventoryStatusDetail', 'macAddress', 'hostname', 'serialNumber',
+                        'softwareVersion', 'locationName', 'upTime', 'softwareType', 'collectionInterval', 'roleSource',
+                        'apManagerInterfaceIp', 'associatedWlcIp', 'bootDateTime', 'collectionStatus', 'interfaceCount',
+                        'lineCardCount', 'lineCardId', 'managementIpAddress', 'memorySize', 'platformId',
+                        'reachabilityFailureReason', 'reachabilityStatus', 'series', 'snmpContact', 'snmpLocation',
+                        'tunnelUdpPort', 'waasDeviceMode', 'instanceUuid', 'instanceTenantId', 'id']
+ count = 1
+ for device in response.json()['response']:
+        device_fields = device.keys()
+        print("device ", count,"------------")
+        count = count + 1
+        for field in expected_fields:
+            if field not in device_fields:
+                #tc.fail(device['hostname'] + ':' + field + ' was expected but not found in the DNA-C results')
+                check_fields = False
+                #print(field,  " not present")
+            else:
+               # tc.okay(device['hostname'] + ':Found expected field:' + field)
+               print(field, " check")
+
+    # If all fields checked out OK
+    #tc.okay('all expected device fields were found')
+
  if response.status_code == 200:
         print("Correct status code")
         print("Status code =",response.status_code)
@@ -165,6 +192,8 @@ def tc_dna_intent_api_v1_network_device_config():
         print("Status code =", response.status_code)
  # complete
  tc.okay('complete')
+
+
 
 def tc_dna_intent_api_v1_network_device_config_count():
     # create this test case
@@ -188,7 +217,6 @@ def tc_dna_intent_api_v1_network_device_config_count():
 
     # complete
     tc.okay('complete')
-
 
 def tc_dna_intent_api_v1_network_device_config_device():
     # create this test case
