@@ -531,7 +531,6 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     else:
         pp.pprint(response.json())
         
-    # BEGIN COPIED CODE FROM SAMPLE
     # Get a list of available fields from the response for each device
     check_fields = True
     expected_node_fields = ['deviceType', 'label', 'ip', 'softwareVersion', 'nodeType', 'family', 'platformId',
@@ -559,14 +558,19 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     			check_fields = False
     		else:
     			tc.okay(link['source'] + ':Found expected field:' + field)
-    		
+    
+    # Check if the response has an API version field		
+    if 'version' in response.json():
+    	tc.okay('found expected field version')
+    else:
+    	pp.pprint('version field was expected but not found in the DNA-C results')
+    	check_fields = False
 
     # If all fields checked out OK
     if check_fields:
         tc.okay('all expected device fields were found')
     else:
         tc.fail('all expected device fields not found')
-    # END COPIED CODE
 
     # test complete
     tc.okay('complete')
