@@ -104,6 +104,21 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
     else:
         pp.pprint(response.json())
 
+    check_fields = True
+    expected_fields = []
+    for device in response.json()['response']:
+        device_fields = device.keys()
+        for field in expected_fields:
+            if field not in device_fields:
+                tc.fail(device['hostname'] + ':' + field + ' was expected but not found in the DNA-C results')
+                check_fields = False
+            else:
+                tc.okay(device['hostname'] + ':Found expected field:' + field)
+
+    # If all fields checked out OK
+    if check_fields:
+        tc.okay('all expected device fields were found')
+
     # complete
     tc.okay('complete')
 
