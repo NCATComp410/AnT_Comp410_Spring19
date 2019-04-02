@@ -7,7 +7,7 @@ import requests
 # define a pretty-printer for diagnostics
 pp = pprint.PrettyPrinter(indent=4)
 
-use_mock = True
+use_mock = False
 
 use_intent = True
 
@@ -112,6 +112,7 @@ def tc_dna_intent_api_v1_interface_network_device():
         response = dnac.get(
             'dna/intent/api/v1/interface/network-device/' + device_id)
         pp.pprint(response.json())
+
 
     # complete
     tc.okay('complete')
