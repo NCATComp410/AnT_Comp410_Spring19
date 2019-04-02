@@ -70,6 +70,7 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
 
     # create this test case
     tc = TestCase(test_name='IntentApiV1FileNamespacePkiTrustpool', yaml_file='params.yaml')
+    tc.okay('starting')
 
     # execute the command and get response
     #response = dnac.get('dna/intent/api/v1/file/namespace/pki-trustpool')
@@ -109,7 +110,15 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
     else:
         pp.pprint(response.json())
 
+    #Checks what the expected fields are
+    for device in response.json()['response']:
+        device_fields = device.keys()
+        print(device_fields)
+
+
     check_fields = True
+
+    #Checking if all the fields were actually found
     expected_fields = ['nameSpace', 'name', 'downloadPath', 'fileSize', 'fileFormat', 'md5Checksum', 'sha1Checksum', 'sftpServerList', 'id']
     for device in response.json()['response']:
         device_fields = device.keys()
@@ -211,10 +220,10 @@ def tc_dna_intent_api_v1_file_namespace_ejbca():
 # (1) Be sure to set use_mock = True
 #     For normal operation use_mock = False
 #     Don't check-in the code with use_mock = True!
-use_mock = True
+use_mock = False
 #
 # (2) Uncomment the following line to activate the responses module:
-@responses.activate
+#@responses.activate
 #
 # Once these two things have been done you will use the mock instead
 # of the real DNA-C.  It's important to know how do this since the
@@ -224,6 +233,12 @@ use_mock = True
 # *** Normally you should not check-in the code with the mock enabled! ***
 #
 def run_all_tests():
+    # print a warning whenever using the mock
+    if use_mock:
+        print('use_mock is set to True - WARNING - Using the MOCK!')
+    else:
+        print('use_mock is set to False - Using DNA-C')
+
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
