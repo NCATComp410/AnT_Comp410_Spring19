@@ -7,11 +7,6 @@ import requests
 # define a pretty-printer for diagnostics
 pp = pprint.PrettyPrinter(indent=4)
 
-# In order to use a mock two things must be done:
-# (1) Set use_mock = True
-# When use_mock = False you will use the real DNA-C
-use_mock = True
-
 use_intent = True
 
 if use_intent:
@@ -24,34 +19,38 @@ else:
 # source code file.  Use this function as a template to build
 # additional test cases
 
-
 def tc_dna_intent_api_v1_network_device_count():
     # create this test case
-    tc = TestCase(test_name='IntentApiV1NetworkDeviceCount',
-                  yaml_file='params.yaml')
+    tc = TestCase(test_name='IntentApiV1NetworkDeviceCount', yaml_file='params.yaml')
+    tc.okay('starting')
 
-    rest_cmd = tc_dna_intent_api_v1_interface_count
+    rest_cmd = 'dna/intent/api/v1/network-device/count'
 
-    # create a session to the DNA-C
-    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
-                     port=tc.params['DnaCenter']['Port'],
-                     username=tc.params['DnaCenter']['Username'],
-                     password=tc.params['DnaCenter']['Password'])
-    # execute the command and get response
-    response = dnac.get('dna/intent/api/v1/network-device/count')
+    if not use_mock:
+        # create a session to the DNA-C
+        dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                         port=tc.params['DnaCenter']['Port'],
+                         username=tc.params['DnaCenter']['Username'],
+                         password=tc.params['DnaCenter']['Password'])
+
+        # execute the command and get response
+        response = dnac.get(rest_cmd)
+    else:
+        json_mock = {'response': 4, 'version': '1.0'}
+        responses.add(responses.GET, 'http://' + rest_cmd,
+                      json=json_mock,
+                      status=200)
+        response = requests.get('http://' + rest_cmd)
 
     # Check to see if a response other than 200-OK was received
     if response.status_code != 200:
         # this test should fail if any other response code received
-        tc.fail('expected 200-OK actual response was ' +
-                str(response.status_code))
-
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
     else:
         # check to make sure there is at least 1 device present to work with
         device_count = response.json()['response']
-
         if device_count:
-            tc.okay('found {}  total devices'.format(device_count))
+            tc.okay(f'found {device_count} total devices')
         else:
             # If no devices were found it's a pretty good bet that most/all remaining
             # tests will fail, so, consider this a critical failure and abort here by
@@ -64,8 +63,7 @@ def tc_dna_intent_api_v1_network_device_count():
         if expected_version == actual_version:
             tc.okay('correct version found')
         else:
-            tc.fail(
-                'expected version {} instead found {} '.format(expected_version, actual_version))
+            tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
 
 # dna/intent/api/v1/interface
@@ -87,7 +85,6 @@ def tc_dna_intent_api_v1_interface():
     tc.okay('complete')
 
 
-# @responses.activate
 def tc_dna_intent_api_v1_interface_network_device():
     # create this test case
     tc = TestCase(test_name='IntentApiV1InterfaceNetworkDevice',
@@ -120,7 +117,6 @@ def tc_dna_intent_api_v1_interface_network_device():
     tc.okay('complete')
 
 
-@responses.activate
 # /dna/intent/api/v1/interface/count
 def tc_dna_intent_api_v1_interface_count():
     # create this test case
@@ -239,10 +235,6 @@ def tc_dna_intent_api_v1_interface_count():
 
 
 # dna/intent/api/v1/network-device
-# To use the mock you need to do two things
-# (1) scroll up to the top of the file and make sure use_mock = True
-# (2) Uncomment the following line to activate the responses module:
-# @responses.activate
 def tc_dna_intent_api_v1_network_device():
     # create this test case
     tc = TestCase(test_name='IntentApiV1NetworkDevice',
@@ -334,9 +326,32 @@ def tc_dna_intent_api_v1_network_device():
     tc.okay('complete')
 
 
+# To use the mock you need to do two things
+#
+# (1) Be sure to set use_mock = True
+#     For normal operation use_mock = False
+#     Don't check-in the code with use_mock = True!
+use_mock = False
+#
+# (2) Uncomment the following line to activate the responses module:
+#@responses.activate
+#
+# Once these two things have been done you will use the mock instead
+# of the real DNA-C.  It's important to know how do this since the
+# real DNA-C could become unavailable and you'll need to use the mock
+# to make progress on your assignments.
+#
+# *** Normally you should not check-in the code with the mock enabled! ***
+#
 def run_all_tests():
+    # print a warning whenever using the mock
+    if use_mock:
+        print('use_mock is set to True - WARNING - Using the MOCK!')
+    else:
+        print('use_mock is set to False - Using DNA-C')
+
     # run this test case first since it will do a basic 'ping'
-    # tc_dna_intent_api_v1_network_device_count()
+    tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
     #  tc_dna_intent_api_v1_interface()

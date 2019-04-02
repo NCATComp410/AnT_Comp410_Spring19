@@ -7,21 +7,6 @@ import requests
 # define a pretty-printer for diagnostics
 pp = pprint.PrettyPrinter(indent=4)
 
-# This is a very basic example of a mock.  To use this mock
-#
-# (1) set use_mock = True
-# (2) uncomment @responses.activate
-#
-# Be sure to change all this back or you will continue using the mock!
-#
-# When use_mock is set to true we won't actually communicate with the DNA-C
-# Instead we'll use some previous responses.
-# Mocks are useful for several reasons.  Sometimes the real DNA-C will be down
-# for maintenance and you will want to make progress on your code.
-# They are also useful for simulating some responses which cannot be easily
-# created using the real system - such as error conditions.
-use_mock = False
-
 # Add ability to fall-back to older API
 use_intent = True
 
@@ -36,20 +21,29 @@ else:
 def tc_dna_intent_api_v1_network_device_count():
     # create this test case
     tc = TestCase(test_name='IntentApiV1NetworkDeviceCount', yaml_file='params.yaml')
+    tc.okay('starting')
 
-    # create a session to the DNA-C
-    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
-                     port=tc.params['DnaCenter']['Port'],
-                     username=tc.params['DnaCenter']['Username'],
-                     password=tc.params['DnaCenter']['Password'])
+    rest_cmd = 'dna/intent/api/v1/network-device/count'
 
-    # execute the command and get response
-    response = dnac.get('dna/intent/api/v1/network-device/count')
+    if not use_mock:
+        # create a session to the DNA-C
+        dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                         port=tc.params['DnaCenter']['Port'],
+                         username=tc.params['DnaCenter']['Username'],
+                         password=tc.params['DnaCenter']['Password'])
+
+        # execute the command and get response
+        response = dnac.get(rest_cmd)
+    else:
+        json_mock = {'response': 4, 'version': '1.0'}
+        responses.add(responses.GET, 'http://' + rest_cmd,
+                      json=json_mock,
+                      status=200)
+        response = requests.get('http://' + rest_cmd)
 
     # Check to see if a response other than 200-OK was received
     if response.status_code != 200:
         # this test should fail if any other response code received
-        # good sample return code check
         tc.fail('expected 200-OK actual response was ' + str(response.status_code))
     else:
         # check to make sure there is at least 1 device present to work with
@@ -70,9 +64,7 @@ def tc_dna_intent_api_v1_network_device_count():
         else:
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
-# Uncomment this line to use the mock this will essentially hi-jack normal requests
-# library and allow us to insert our own mocked-up responses.
-# @responses.activate
+
 def tc_dna_intent_api_vi_topology_l2_vlan():
     # create this test case
     tc = TestCase(test_name='IntentApiV1TopologyL2Vlan', yaml_file='params.yaml')
@@ -121,9 +113,7 @@ def tc_dna_intent_api_vi_topology_l2_vlan():
     # test complete
     tc.okay('complete')
 
-# Uncomment this line to use the mock this will essentially hi-jack normal requests
-# library and allow us to insert our own mocked-up responses.
-# @responses.activate
+
 def tc_dna_intent_api_vi_topology_site_topology():
     # create this test case
     tc = TestCase(test_name='IntentApiV1SiteTopology', yaml_file='params.yaml')
@@ -385,9 +375,7 @@ def tc_dna_intent_api_vi_topology_site_topology():
     # test complete
     tc.okay('complete')
 
-# Uncomment this line to use the mock this will essentially hi-jack normal requests
-# library and allow us to insert our own mocked-up responses.
-# @responses.activate
+
 def tc_dna_intent_api_vi_topology_physical_topology():
     # create this test case
     tc = TestCase(test_name='IntentApiV1PhysicalTopology', yaml_file='params.yaml')
@@ -604,7 +592,30 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     tc.okay('complete')
 
 
+# To use the mock you need to do two things
+#
+# (1) Be sure to set use_mock = True
+#     For normal operation use_mock = False
+#     Don't check-in the code with use_mock = True!
+use_mock = False
+#
+# (2) Uncomment the following line to activate the responses module:
+#@responses.activate
+#
+# Once these two things have been done you will use the mock instead
+# of the real DNA-C.  It's important to know how do this since the
+# real DNA-C could become unavailable and you'll need to use the mock
+# to make progress on your assignments.
+#
+# *** Normally you should not check-in the code with the mock enabled! ***
+#
 def run_all_tests():
+    # print a warning whenever using the mock
+    if use_mock:
+        print('use_mock is set to True - WARNING - Using the MOCK!')
+    else:
+        print('use_mock is set to False - Using DNA-C')
+
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
