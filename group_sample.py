@@ -15,26 +15,6 @@ if use_intent:
 else:
     intent_api = ''
 
-# This is a very basic example of a mock.  To use this mock
-#
-# (1) set use_mock = True
-# (2) uncomment @responses.activate
-#
-# Be sure to change all this back or you will continue using the mock!
-#
-# When use_mock is set to true we won't actually communicate with the DNA-C
-# Instead we'll use some previous responses.
-# Mocks are useful for several reasons.  Sometimes the real DNA-C will be down
-# for maintenance and you will want to make progress on your code.
-# They are also useful for simulating some responses which cannot be easily
-# created using the real system - such as error conditions.
-use_mock = False
-
-# Uncomment this line to use the mock this will essentially hi-jack normal requests
-# library and allow us to insert our own mocked-up responses.
-# THIS APPLIES TO THE NEXT FUNCTION - it will only hijack request/responses for the next function
-# @responses.activate
-
 
 def tc_dna_intent_api_v1_network_device():
     # create this test case
@@ -168,7 +148,6 @@ def tc_dna_intent_api_v1_network_device():
     # If all fields checked out OK
     if check_fields:
         tc.okay('all expected device fields were found')
-
 
     # The host list has changed frequently in the sandbox which makes maintaining
     # this test step unrealistic, so, commenting it out for now
@@ -311,7 +290,30 @@ def tc_dna_intent_api_v1_network_device():
             tc.okay('invalid serial number check passed')
 
 
+# To use the mock you need to do two things
+#
+# (1) Be sure to set use_mock = True
+#     For normal operation use_mock = False
+#     Don't check-in the code with use_mock = True!
+use_mock = True
+#
+# (2) Uncomment the following line to activate the responses module:
+@responses.activate
+#
+# Once these two things have been done you will use the mock instead
+# of the real DNA-C.  It's important to know how do this since the
+# real DNA-C could become unavailable and you'll need to use the mock
+# to make progress on your assignments.
+#
+# *** Normally you should not check-in the code with the mock enabled! ***
+#
 def run_all_tests():
+    # print a warning whenever using the mock
+    if use_mock:
+        print('use_mock is set to True - WARNING - Using the MOCK!')
+    else:
+        print('use_mock is set to False - Using DNA-C')
+
     tc_dna_intent_api_v1_network_device()
 
 
