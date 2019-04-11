@@ -383,6 +383,8 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     # REST API comment to be executed
     rest_cmd = intent_api + 'api/v1/topology/physical-topology'
 
+    tc.okay('starting')
+
     # If not using mock, create a DNA-C session and make request
     if not use_mock:
         # create a session to the DNA-C
