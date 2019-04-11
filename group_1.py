@@ -324,13 +324,13 @@ def tc_dna_intent_api_vi_topology_site_topology():
 
 
     if not use_mock:
-         dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
-                port=tc.params['DnaCenter']['Port'],
-                username=tc.params['DnaCenter']['Username'],
-                password=tc.params['DnaCenter']['Password'])
+        dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+               port=tc.params['DnaCenter']['Port'],
+               username=tc.params['DnaCenter']['Username'],
+               password=tc.params['DnaCenter']['Password'])
 
     # get site topology
-         response = dnac.get(rest_cmd)
+        response = dnac.get(rest_cmd)
     # The json_mock is something which was saved in responses.log during a successful session
     else:
         json_mock = {'response': {
@@ -750,7 +750,7 @@ def tc_dna_intent_api_vi_topology_physical_topology():
         tc.fail('expected 200-OK actual response was ' + str(response.status_code), True)
     else:
         pp.pprint(response.json())
-        
+
     # Get a list of available fields from the response for each device
     check_fields = True
     expected_node_fields = ['deviceType', 'label', 'ip', 'softwareVersion', 'nodeType', 'family', 'platformId',
@@ -766,36 +766,36 @@ def tc_dna_intent_api_vi_topology_physical_topology():
             else:
                 tc.okay(node['label'] + ':Found expected field:' + field)
 
-    expected_link_fields = ['source', 'startPortID', 'startPortName', 'startPortIpv4Address', 'startPortIpv4Mask', 'startPortSpeed', 
+    expected_link_fields = ['source', 'startPortID', 'startPortName', 'startPortIpv4Address', 'startPortIpv4Mask', 'startPortSpeed',
             'target', 'endPortID', 'endPortName', 'endPortIpv4Address', 'endPortIpv4Mask', 'endPortSpeed', 'linkStatus', 'additionalInfo', 'id']
-    
+
     # If all node fields checked out OK
     if check_fields:
         tc.okay('all expected node fields were found')
     else:
         tc.fail('all expected node fields not found')
-    
+
     # Check that all expected fields for a link are present
     for link in data['links']:
-    	link_fields = link.keys()
-    	for field in expected_link_fields:
-    		if field not in link_fields:
-    			tc.fail(link['source'] + ':' + field + ' was expected but not found in the DNA-C results')
-    			check_fields = False
-    		else:
-    			tc.okay(link['source'] + ':Found expected field:' + field)
-    
+        link_fields = link.keys()
+        for field in expected_link_fields:
+            if field not in link_fields:
+                tc.fail(link['source'] + ':' + field + ' was expected but not found in the DNA-C results')
+                check_fields = False
+            else:
+                tc.okay(link['source'] + ':Found expected field:' + field)
+
     # If all link fields checked out OK
     if check_fields:
         tc.okay('all expected link fields were found')
     else:
         tc.fail('all expected link fields not found')
-    
-    # Check if the response has an API version field		
+
+    # Check if the response has an API version field
     if 'version' in response.json():
-      tc.okay('found expected field version')
+        tc.okay('found expected field version')
     else:
-      tc.fail('version field was expected but not found in the DNA-C results')
+        tc.fail('version field was expected but not found in the DNA-C results')
 
     # test complete
     tc.okay('complete')
@@ -835,3 +835,4 @@ def run_all_tests():
 
 
 run_all_tests()
+
