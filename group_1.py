@@ -793,10 +793,9 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     
     # Check if the response has an API version field		
     if 'version' in response.json():
-    	tc.okay('found expected field version')
+      tc.okay('found expected field version')
     else:
-    	pp.pprint('version field was expected but not found in the DNA-C results')
-    	check_fields = False
+      tc.fail('version field was expected but not found in the DNA-C results')
 
     # test complete
     tc.okay('complete')
