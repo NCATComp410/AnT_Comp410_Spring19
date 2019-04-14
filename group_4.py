@@ -158,6 +158,7 @@ def tc_dna_intent_api_v1_interface_count():
             tc.fail('no devices were found', abort=True)
 
     check_fields = True
+    check_values = True
     expected_keys = ['response', 'version']
 
     for key in expected_keys:
@@ -169,6 +170,19 @@ def tc_dna_intent_api_v1_interface_count():
         tc.okay('all expected device fields were found')
     else:
         tc.fail('all expected device fields not found')
+
+    if not str(response.json()['response']).isdigit():
+        tc.fail("numeric value was expected to be a number but instead got: " + response.json()['response'])
+        check_values = False
+
+    if not str(response.json()['version']) == '1.0':
+        tc.fail("1.0 was expected to be the value of Version but instead got: " + response.json()['response'])
+        check_values = False
+
+    if check_values:
+        tc.okay('all fields had their expected values')
+    else:
+        tc.fail('all or some fields had unexpected values')
 
     # test complete
     tc.okay('complete')
