@@ -84,7 +84,8 @@ def tc_dna_intent_api_v1_file_namespace():
         # execute the command and get response
         response = dnac.get(rest_cmd)
     else:
-        json_mock = {'response': ['ivm-kgv', 'pki-trustpool', 'config', 'swimfiles', 'ejbca', 'command-runner', 'nvsfiles'], 'version': '1.0'}
+        json_mock = {'response': ['group_export', 'ivm-kgv', 'dna-maps-service', 'pki-trustpool', 'swimfiles', 'ejbca', 'command-runner', 'nvsfiles'], 'version': '1.0'}
+
         responses.add(responses.GET, 'http://' + rest_cmd,
                       json=json_mock,
                       status=200)
@@ -101,16 +102,13 @@ def tc_dna_intent_api_v1_file_namespace():
     print(values)
 
     check_fields = True
-    expected_namespace_fields= ['attributeInfo','downloadPath','encrypted','fileFormat','fileSize','id','md5Checksum','name','nameSpace','sftpServerList','sha1Checksum',
-                                'taskId']
-    for nameSpace in response.json()['response']:
-        nameSpace_fields = nameSpace.keys()
-        for field in expected_namespace_fields:
-            if field not in nameSpace_fields:
-                tc.fail(nameSpace['nameSpace'] + ':' + field + ' was expected but not found in the DNA-C results')
+    expected_namespace_fields= ['group_export', 'ivm-kgv', 'pki-trustpool', 'swimfiles', 'ejbca', 'command-runner', 'nvsfiles']
+    for field in expected_namespace_fields:
+            if field not in response.json():
+                tc.fail(field + ':' + field + ' was expected but not found in the DNA-C results')
                 check_fields = False
             else:
-                tc.okay(nameSpace['nameSpace'] + ':Found expected field:' + field)
+                tc.okay(field + ':Found expected field:' + field)
     # If all fields checked out OK
     if check_fields:
         tc.okay('all expected device fields were found')
@@ -168,7 +166,17 @@ def tc_dna_intent_api_v1_file_namespace_ivm_kgv():
         # execute the command and get response
         response = dnac.get(rest_cmd)
     else:
-        json_mock = {'response': [{'nameSpace': 'ivm-kgv', 'name': '20181219122755126_Cisco_KnownGoodValues.tar', 'downloadPath': '/file/eceb0d70-689d-47a2-ad34-bb00643b260a', 'fileSize': '17464246', 'fileFormat': 'application/x-tar', 'md5Checksum': 'b76e897b4bbf429e5a012bb265151616', 'sha1Checksum': 'eab9dc81b6bed9df1aa971b0f0159e4338af1211', 'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472', 'downloadurl': '/ivm-kgv/eceb0d70-689d-47a2-ad34-bb00643b260a/20181219122755126_Cisco_KnownGoodValues.tar', 'status': 'SUCCESS', 'createTimeStamp': '12/19/2018 12:29:29', 'updateTimeStamp': '12/19/2018 12:29:29', 'id': '2e4c72f3-bc40-46c6-815e-0e29418f5efe'}], 'id': 'eceb0d70-689d-47a2-ad34-bb00643b260a'}], 'version': '1.0'}
+        json_mock = {'response': [{'nameSpace': 'ivm-kgv',
+                                   'name': '20181219122755126_Cisco_KnownGoodValues.tar',
+                                   'downloadPath': '/file/eceb0d70-689d-47a2-ad34-bb00643b260a', 'fileSize': '17464246','fileFormat': 'application/x-tar',
+                                   'md5Checksum': 'b76e897b4bbf429e5a012bb265151616',
+                                   'sha1Checksum': 'eab9dc81b6bed9df1aa971b0f0159e4338af1211',
+                                   'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472',
+                                    'downloadurl':'/ivm-kgv/eceb0d70-689d-47a2-ad34-bb00643b260a/20181219122755126_Cisco_KnownGoodValues.tar',
+                                    'status': 'SUCCESS', 'createTimeStamp': '12/19/2018 12:29:29',
+                                    'updateTimeStamp': '12/19/2018 12:29:29',
+                                    'id': '2e4c72f3-bc40-46c6-815e-0e29418f5efe'}],
+                                   'id': 'eceb0d70-689d-47a2-ad34-bb00643b260a'}], 'version': '1.0'}
         responses.add(responses.GET, 'http://' + rest_cmd,
                       json=json_mock,
                       status=200)
@@ -196,7 +204,7 @@ def tc_dna_intent_api_v1_file_namespace_ivm_kgv():
 #     For normal operation use_mock = False
 #     Don't check-in the code with use_mock = True!
 use_mock = False
-#
+
 # (2) Uncomment the following line to activate the responses module:
 #@responses.activate
 #
