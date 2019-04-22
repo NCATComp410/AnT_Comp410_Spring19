@@ -11,6 +11,14 @@ pp = pprint.PrettyPrinter(indent=4)
 # This is a basic test case template included in each team's
 # source code file.  Use this function as a template to build
 # additional test cases
+use_intent = True
+
+if use_intent:
+    intent_api = 'dna/intent/'
+else:
+    intent_api = ''
+
+
 def tc_dna_intent_api_v1_network_device_count():
     # create this test case
     tc = TestCase(test_name='IntentApiV1NetworkDeviceCount', yaml_file='params.yaml')
@@ -81,16 +89,31 @@ def tc_dna_intent_api_v1_file_namespace():
                       json=json_mock,
                       status=200)
         response = requests.get('http://' + rest_cmd)
-
+    #Sprint #1
     if response.status_code==200:
         print("IT WORKS ")
     else:
         print("IT DOES NOT WORK")
-
+    #SPRINT #3
     values = response.json()['response']
 
     # here are the values that need to be checked
     print(values)
+
+    check_fields = True
+    expected_namespace_fields= ['attributeInfo','downloadPath','encrypted','fileFormat','fileSize','id','md5Checksum','name','nameSpace','sftpServerList','sha1Checksum',
+                                'taskId']
+    for nameSpace in response.json()['response']:
+        nameSpace_fields = nameSpace.keys()
+        for field in expected_namespace_fields:
+            if field not in nameSpace_fields:
+                tc.fail(nameSpace['nameSpace'] + ':' + field + ' was expected but not found in the DNA-C results')
+                check_fields = False
+            else:
+                tc.okay(nameSpace['nameSpace'] + ':Found expected field:' + field)
+    # If all fields checked out OK
+    if check_fields:
+        tc.okay('all expected device fields were found')
 
     # complete
     tc.okay('complete')
@@ -172,10 +195,10 @@ def tc_dna_intent_api_v1_file_namespace_ivm_kgv():
 # (1) Be sure to set use_mock = True
 #     For normal operation use_mock = False
 #     Don't check-in the code with use_mock = True!
-use_mock = True
+use_mock = False
 #
 # (2) Uncomment the following line to activate the responses module:
-@responses.activate
+#@responses.activate
 #
 # Once these two things have been done you will use the mock instead
 # of the real DNA-C.  It's important to know how do this since the
@@ -186,12 +209,12 @@ use_mock = True
 #
 def run_all_tests():
     # run this test case first since it will do a basic 'ping'
-    tc_dna_intent_api_v1_network_device_count()
+    #tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
     tc_dna_intent_api_v1_file_namespace()
-    tc_dna_intent_api_v1_file_namespace_network_device_export()
-    tc_dna_intent_api_v1_file_namespace_ivm_kgv()
+    #tc_dna_intent_api_v1_file_namespace_network_device_export()
+    #tc_dna_intent_api_v1_file_namespace_ivm_kgv()
 
 
 run_all_tests()
