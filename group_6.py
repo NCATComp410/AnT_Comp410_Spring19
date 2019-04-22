@@ -101,19 +101,20 @@ def tc_dna_intent_api_v1_file_namespace():
     print(values)
 
     check_fields = True
-    expected_namespace_fields= ['attributeInfo','downloadPath','encrypted','fileFormat','fileSize','id','md5Checksum','name','nameSpace','sftpServerList','sha1Checksum',
-                                'taskId']
-    for nameSpace in response.json()['response']:
-        nameSpace_fields = nameSpace.keys()
-        for field in expected_namespace_fields:
-            if field not in nameSpace_fields:
-                tc.fail(nameSpace['nameSpace'] + ':' + field + ' was expected but not found in the DNA-C results')
-                check_fields = False
-            else:
-                tc.okay(nameSpace['nameSpace'] + ':Found expected field:' + field)
-    # If all fields checked out OK
+    # these are the expected namespaces this command should return
+    expected_namespace_values = ['group_export', 'ivm-kgv', 'dna-maps-service', 'pki-trustpool', 'swimfiles', 'ejbca', 'command-runner', 'nvsfiles']
+
+    # now check to see if each namespace is present
+    for nameSpace in values:
+        if nameSpace not in expected_namespace_values:
+            tc.fail(nameSpace + ' was expected but not found in the DNA-C results')
+            check_fields = False
+        else:
+            tc.okay('Found expected value:' + nameSpace)
+
+    # If all values checked out OK
     if check_fields:
-        tc.okay('all expected device fields were found')
+        tc.okay('all expected device values were found')
 
     # complete
     tc.okay('complete')
