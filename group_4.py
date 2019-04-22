@@ -133,7 +133,7 @@ def tc_dna_intent_api_v1_interface_count():
         # get site interface count
         response = dnac.get(rest_cmd)
     else:
-        json_mock = {{'response': 112, 'version': '1.0'}}
+        json_mock = {'response': 112, 'version': '1.0'}
 
         responses.add(responses.GET, 'http://' + rest_cmd,
                       json=json_mock,
