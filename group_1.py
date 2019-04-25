@@ -1,5 +1,6 @@
 from utils import DnaCenter
 from utils import TestCase
+from utils import is_valid_ipv4_address
 import pprint
 import responses
 import requests
@@ -764,6 +765,12 @@ def tc_dna_intent_api_vi_topology_physical_topology():
                 check_fields = False
             else:
                 tc.okay(node['label'] + ':Found expected field:' + field)
+                if field == 'ip':
+                    if is_valid_ipv4_address(node['ip']):
+                        tc.okay(node['ip'] + ' is a valid address')
+                    else:
+                        tc.fail(node['ip'] + " INVALID address")
+
 
     expected_link_fields = ['source', 'startPortID', 'startPortName', 'startPortIpv4Address', 'startPortIpv4Mask', 'startPortSpeed',
             'target', 'endPortID', 'endPortName', 'endPortIpv4Address', 'endPortIpv4Mask', 'endPortSpeed', 'linkStatus', 'additionalInfo', 'id']
@@ -786,6 +793,16 @@ def tc_dna_intent_api_vi_topology_physical_topology():
                 check_fields = False
             else:
                 tc.okay(link['source'] + ':Found expected field:' + field)
+                if field == 'startPortIpv4Address':
+                    if is_valid_ipv4_address(link['startPortIpv4Address']):
+                        tc.okay(link['startPortIpv4Address'] + ' is a valid address')
+                    else:
+                        tc.fail(link['startPortIpv4Address'] + ' INVALID address')
+                if field == 'endPortIpv4Address':
+                    if is_valid_ipv4_address(link['endPortIpv4Address']):
+                        tc.okay(link['endPortIpv4Address'] + ' is a valid address')
+                    else:
+                        tc.fail(link['endPortIpv4Address'] + ' INVALID address')
 
     # If all link fields checked out OK
     if check_fields:
