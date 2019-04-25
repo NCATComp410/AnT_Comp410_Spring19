@@ -2,6 +2,7 @@ import yaml
 import requests
 from requests.auth import HTTPBasicAuth
 from datetime import datetime
+import re
 
 # Disable insecure warnings
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -103,6 +104,18 @@ class TestCase:
 
     def name(self):
         return self.name
+
+
+def is_valid_ipv4_address(address):
+    # create a regex that matches an ipv4 address
+    # 000.000.000.000 is the format
+    # begins with 1 to 3 digits followed by a . repeated 3 times followed by 1 to 3 digits and ends
+    ipv4_re = r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$'
+
+    if re.search(ipv4_re, address):
+        return True
+    else:
+        return False
 
 
 
