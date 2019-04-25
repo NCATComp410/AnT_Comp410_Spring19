@@ -775,6 +775,9 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     else:
         tc.fail('all expected node fields not found')
 
+    # Set check fields back to true for checking link
+    check_fields = True;
+        
     # Check that all expected fields for a link are present
     for link in data['links']:
         link_fields = link.keys()
