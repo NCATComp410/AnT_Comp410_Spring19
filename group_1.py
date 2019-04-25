@@ -551,7 +551,6 @@ def tc_dna_intent_api_vi_topology_physical_topology():
                       status=200)
         response = requests.get('http://' + rest_cmd)
 
-
     # Check to see if a response other than 200-OK was received
     if response.status_code != 200:
         # this test should fail if any other response code received
@@ -579,20 +578,20 @@ def tc_dna_intent_api_vi_topology_physical_topology():
     
     # Check that all expected fields for a link are present
     for link in data['links']:
-    	link_fields = link.keys()
-    	for field in expected_link_fields:
-    		if field not in link_fields:
-    			tc.fail(link['source'] + ':' + field + ' was expected but not found in the DNA-C results')
-    			check_fields = False
-    		else:
-    			tc.okay(link['source'] + ':Found expected field:' + field)
+        link_fields = link.keys()
+        for field in expected_link_fields:
+            if field not in link_fields:
+                tc.fail(link['source'] + ':' + field + ' was expected but not found in the DNA-C results')
+                check_fields = False
+            else:
+                tc.okay(link['source'] + ':Found expected field:' + field)
     
     # Check if the response has an API version field		
     if 'version' in response.json():
-    	tc.okay('found expected field version')
+        tc.okay('found expected field version')
     else:
-    	pp.pprint('version field was expected but not found in the DNA-C results')
-    	check_fields = False
+        pp.pprint('version field was expected but not found in the DNA-C results')
+        check_fields = False
 
     # If all fields checked out OK
     if check_fields:
