@@ -1,5 +1,6 @@
 from utils import DnaCenter
 from utils import TestCase
+from utils import is_valid_md5_checksum
 import pprint
 import responses
 import requests
@@ -93,7 +94,7 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
         # The json_mock is something which was saved in responses.log during a successful session
         # It is much easier to build this way than to build it from scratch!
 
-        #edited mock
+        # edited mock
         json_mock = {'response': [{'nameSpace': 'pki-trustpool', 'name': 'iostruststore.jks', 'downloadPath': '/file/b5516810-6c23-4bc1-be7e-ffd284fce53e', 'fileSize': '162280', 'fileFormat': 'application/x-java-keystore', 'md5Checksum': '1dac1a2acf0253f983eb61a51e7aa250', 'sha1Checksum': 'c4582142ff74967c1202e3c0a5b95292f08eb5b7', 'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472', 'downloadurl': '/pki-trustpool/b5516810-6c23-4bc1-be7e-ffd284fce53e/iostruststore.jks', 'status': 'SUCCESS', 'createTimeStamp': '10/30/2018 21:00:13', 'updateTimeStamp': '10/30/2018 21:00:13', 'id': 'fdf9d059-b4b8-4b78-b79d-e0aa291ecd3b'}], 'id': 'b5516810-6c23-4bc1-be7e-ffd284fce53e'}], 'version': '1.0'}
 
         # instead of actually talking to the DNA-C we're going to mock-up the response
@@ -110,7 +111,7 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
     else:
         pp.pprint(response.json())
 
-    #Checks what the expected fields are
+    # Checks what the expected fields are
     for device in response.json()['response']:
         device_fields = device.keys()
         print(device_fields)
@@ -133,6 +134,13 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
     if check_fields:
         tc.okay('all expected device fields were found')
 
+    # Sprint 4 - validates the checksum to make sure its a 32 hex character string (0-9/a-f)
+    if is_valid_md5_checksum(device['md5Checksum']):
+        tc.okay(device['md5Checksum'] + ' is a valid md5Checksum')
+        print('\033[32m' + 'Validation Success' + '\033[0m')  # Success green text
+    else:
+        tc.fail(device['md5Checksum'] + ' is NOT a valid md5Checksum')
+        print('\033[31m' + 'Validation Failure' + '\033[0m')  # Failure red text
     # complete
     tc.okay('complete')
 
@@ -223,7 +231,7 @@ def tc_dna_intent_api_v1_file_namespace_ejbca():
 use_mock = False
 #
 # (2) Uncomment the following line to activate the responses module:
-#@responses.activate
+# @responses.activate
 #
 # Once these two things have been done you will use the mock instead
 # of the real DNA-C.  It's important to know how do this since the
