@@ -65,24 +65,88 @@ def tc_dna_intent_api_v1_network_device_count():
         else:
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
-
 # dna/intent/api/v1/interface
 def tc_dna_intent_api_v1_interface():
     # create this test case
     tc = TestCase(test_name='IntentApiV1Interface', yaml_file='params.yaml')
+    rest_cmd = intent_api + 'api/v1/interface'
 
-    # create a session to the DNA-C
-    dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
-                     port=tc.params['DnaCenter']['Port'],
-                     username=tc.params['DnaCenter']['Username'],
-                     password=tc.params['DnaCenter']['Password'])
+    if not use_mock:
+        # create a session to the DNA-C
+        dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
+                         port=tc.params['DnaCenter']['Port'],
+                         username=tc.params['DnaCenter']['Username'],
+                         password=tc.params['DnaCenter']['Password'])
+        # get site interface
+        # execute the command and get response
+        # response = dnac.get('dna/intent/api/v1/interface')
+        response = dnac.get(rest_cmd)
+        pp.pprint(response.json())
+    else:
+        json_mock = {'response': [{
+            "adminStatus": "string",
+            "className": "string",
+            "description": "string",
+            "deviceId": "string",
+            "duplex": "string",
+            "id": "string",
+            "ifIndex": "string",
+            "instanceTenantId": "string",
+            "instanceUuid": "string",
+            "interfaceType": "string",
+            "ipv4Address": "string",
+            "ipv4Mask": "string",
+            "isisSupport": "string",
+            "lastUpdated": "string",
+            "macAddress": "string",
+            "mappedPhysicalInterfaceId": "string",
+            "mappedPhysicalInterfaceName": "string",
+            "mediaType": "string",
+            "nativeVlanId": "string",
+            "ospfSupport": "string",
+            "pid": "string",
+            "portMode": "string",
+            "portName": "string",
+            "portType": "string",
+            "serialNo": "string",
+            "series": "string",
+            "speed": "string",
+            "status": "string",
+            "vlanId": "string",
+            "voiceVlan": "string"
+          }
+        ],
+            "version": "string"
+     }
 
-    # execute the command and get response
-    response = dnac.get('dna/intent/api/v1/interface')
-    pp.pprint(response.json())
+        responses.add(responses.GET, 'http://' + rest_cmd, json=json_mock, status=200)
+        response = requests.get('http://' + rest_cmd)
 
-    # complete
-    tc.okay('complete')
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        pp.pprint(response.json())
+
+        check_fields = True
+        expected_fields = ['adminStatus', 'className', 'description', 'deviceId', 'duplex', 'id', 'ifIndex', 'instanceTenantId', 'instanceUuid', 'interfaceType', 'ipv4Address', 'ipv4Mask', 'isisSupport', 'lastUpdated', 'macAddress', 'mappedPhysicalInterfaceId', 'mappedPhysicalInterfaceName', 'mediaType', 'nativeVlanId', 'ospfSupport', 'pid', 'portMode', 'portName', 'portType', 'serialNo', 'series', 'speed', 'status', 'vlanId', 'voiceVlan']
+        for device in response.json()['response']:
+            device_fields = device.keys()
+            for field in expected_fields:
+                if field not in device_fields:
+                    tc.fail(field + ' was expected but not found in the DNA-C results')
+                    check_fields = False
+                else:
+                    tc.okay(':Found expected field:' + field)
+
+            # If all fields checked out OK
+        if check_fields:
+            tc.okay('all expected device fields were found')
+
+        for device in response.json()['response']:
+            pp.pprint(device.keys);
+        # complete
+        tc.okay('complete')
 
 
 def tc_dna_intent_api_v1_interface_network_device():
@@ -310,10 +374,10 @@ def run_all_tests():
     tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
-    # tc_dna_intent_api_v1_interface()
-    # tc_dna_intent_api_v1_interface_network_device()
+    tc_dna_intent_api_v1_interface()
+    tc_dna_intent_api_v1_interface_network_device()
     tc_dna_intent_api_v1_interface_count()
-    # tc_dna_intent_api_v1_network_device()
+    tc_dna_intent_api_v1_network_device()
 
 
 run_all_tests()
