@@ -1,5 +1,6 @@
 from utils import DnaCenter
 from utils import TestCase
+from utils import is_valid_ipv4_address
 import pprint
 import responses
 import requests
@@ -23,6 +24,7 @@ def tc_dna_intent_api_v1_network_device():
     # REST API command to be executed
     rest_cmd = intent_api + 'api/v1/network-device'
 
+    # sprint #2 - an example mock
     if not use_mock:
         # In this case we don't want to use a mock and will create a normal session to the dnac
         # create a session to the DNA-C and get a response back
@@ -110,6 +112,7 @@ def tc_dna_intent_api_v1_network_device():
 
     # Following code gets processed normally with or without the mock in place
     # Check to see if a response other than 200-OK was received
+    # sprint #1 - check response codes
     if response.status_code != 200:
         # this test should fail if any other response code received
         tc.fail('expected 200-OK actual response was ' + str(response.status_code))
@@ -132,7 +135,7 @@ def tc_dna_intent_api_v1_network_device():
     print('Serial Numbers:')
     pp.pprint(serialNumber_list)
 
-    # sprint #3 example
+    # sprint #3 example of checking for expected fields
     # Get a list of available fields from the response for each device
     check_fields = True
     expected_fields = ['type', 'errorCode', 'family', 'location', 'role', 'errorDescription', 'lastUpdateTime', 'lastUpdated', 'tagCount', 'inventoryStatusDetail', 'macAddress', 'hostname', 'serialNumber', 'softwareVersion', 'locationName', 'upTime', 'softwareType', 'collectionInterval', 'roleSource', 'apManagerInterfaceIp', 'associatedWlcIp', 'bootDateTime', 'collectionStatus', 'interfaceCount', 'lineCardCount', 'lineCardId', 'managementIpAddress', 'memorySize', 'platformId', 'reachabilityFailureReason', 'reachabilityStatus', 'series', 'snmpContact', 'snmpLocation', 'tunnelUdpPort', 'waasDeviceMode', 'instanceUuid', 'instanceTenantId', 'id']
@@ -262,6 +265,17 @@ def tc_dna_intent_api_v1_network_device():
                     tc.fail('found unexpected serial number ' + sn)
                     pp.pprint(response.json())
                     sn_ok = False
+
+                # sprint #4 - check the format content of at least one field
+                # In this example each device has a managementIpAddress
+                # We'll check to make sure the format on this is correct
+                # 'managementIpAddress': '10.10.22.70'
+                # This is an example of an ipv4 ip address
+                if is_valid_ipv4_address(device['managementIpAddress']):
+                    tc.okay(device['managementIpAddress'] + ' is a valid address')
+                else:
+                    tc.fail(device['managementIpAddress'] + ' INVALID address')
+
     if sn_ok:
         tc.okay('serial numbers correct')
 

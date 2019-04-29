@@ -2,15 +2,19 @@ import yaml
 import requests
 from requests.auth import HTTPBasicAuth
 from datetime import datetime
+import re
 
 # Disable insecure warnings
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # basic debug print utility
 # set verbose=True to enable debug messages
 # set verbose=False to turn them off
 verbose = False
+
+
 def dbprint(msg):
     if verbose:
         print('dbprint:', end='')
@@ -45,7 +49,7 @@ class DnaCenter:
     # this function will log the result of each get and response
     def __log_result(self, url, response):
         d = datetime.now()
-        with open ('response.log', 'a') as f:
+        with open('response.log', 'a') as f:
             print(d.isoformat(), file=f)
             print(url, file=f)
             print(response, file=f)
@@ -105,7 +109,23 @@ class TestCase:
         return self.name
 
 
+def is_valid_ipv4_address(address):
+    # create a regex that matches an ipv4 address
+    # 000.000.000.000 is the format
+    # begins with 1 to 3 digits followed by a . repeated 3 times followed by 1 to 3 digits and ends
+    ipv4_re = r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$'
+
+    if re.search(ipv4_re, address):
+        return True
+    else:
+        return False
 
 
+def is_valid_md5_checksum(checksum):
+    # checksum is a 32 character long hexadecimal number
+    # each character must be either 0-9 or a-f
 
-
+    if checksum.isalnum() and len(checksum) == 32:
+        return True;
+    else:
+        return False;
