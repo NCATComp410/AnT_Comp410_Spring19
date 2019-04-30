@@ -136,7 +136,7 @@ def tc_dna_intent_api_v1_network_device():
     
     # Get a list of available fields from the response for each device
     check_fields = True
-    expected_fields = ['type', 'errorCode', 'family', 'location', 'role', 'errorDescription', 'lastUpdateTime', 'lastUpdated']#, 'tagCount', 'inventoryStatusDetail', 'macAddress', 'hostname', 'serialNumber', 'softwareVersion', 'locationName', 'upTime', 'softwareType', 'collectionInterval', 'roleSource', 'apManagerInterfaceIp', 'associatedWlcIp', 'bootDateTime', 'collectionStatus', 'interfaceCount', 'lineCardCount', 'lineCardId', 'managementIpAddress', 'memorySize', 'platformId', 'reachabilityFailureReason', 'reachabilityStatus', 'series', 'snmpContact', 'snmpLocation', 'tunnelUdpPort', 'waasDeviceMode', 'instanceUuid', 'instanceTenantId', 'id']
+    expected_fields = ['type', 'errorCode', 'family', 'location', 'role', 'errorDescription', 'lastUpdateTime', 'lastUpdated', 'tagCount', 'inventoryStatusDetail', 'macAddress', 'hostname', 'serialNumber', 'softwareVersion', 'locationName', 'upTime', 'softwareType', 'collectionInterval', 'roleSource', 'apManagerInterfaceIp', 'associatedWlcIp', 'bootDateTime', 'collectionStatus', 'interfaceCount', 'lineCardCount', 'lineCardId', 'managementIpAddress', 'memorySize', 'platformId', 'reachabilityFailureReason', 'reachabilityStatus', 'series', 'snmpContact', 'snmpLocation', 'tunnelUdpPort', 'waasDeviceMode', 'instanceUuid', 'instanceTenantId', 'id']
     for device in response.json()['response']:
         device_fields = device.keys()
         for field in expected_fields:
