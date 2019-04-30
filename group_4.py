@@ -1,4 +1,4 @@
-from utils import DnaCenter
+from utils import DnaCenter, is_valid_macAddress
 from utils import TestCase
 import pprint
 import responses
@@ -146,6 +146,15 @@ def tc_dna_intent_api_v1_interface():
         for device in response.json()['response']:
             pp.pprint(device.keys);
         # complete
+        #Sprint 4 - check the format content of at least one field
+        # We'll check to make sure the format on this is correct
+        # 'deviceId': '1904ca0d-01be-4d13-88e5-4f4f9980b512'
+        # This is an example of an apiv1_interface device id
+        if is_valid_macAddress(device['macAddress']):
+            tc.okay(device['macAddress'] + ' is a valid macAddress')
+
+        else:
+            tc.fail(device['macAddress'] + ' is NOT a valid macAddress')
         tc.okay('complete')
 
 
@@ -371,13 +380,13 @@ def run_all_tests():
         print('use_mock is set to False - Using DNA-C')
 
     # run this test case first since it will do a basic 'ping'
-    tc_dna_intent_api_v1_network_device_count()
+    #tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
     tc_dna_intent_api_v1_interface()
-    tc_dna_intent_api_v1_interface_network_device()
-    tc_dna_intent_api_v1_interface_count()
-    tc_dna_intent_api_v1_network_device()
+    #tc_dna_intent_api_v1_interface_network_device()
+    #tc_dna_intent_api_v1_interface_count()
+    #tc_dna_intent_api_v1_network_device()
 
 
 run_all_tests()
