@@ -120,12 +120,30 @@ def is_valid_ipv4_address(address):
     else:
         return False
 
+def is_valid_32h_id(id):
+    # a valid id is a 32 character hexadecimal number
+    # it matches the format ########-####-####-####-############
+
+    id_re = r'^(?:[0-9a-f]){8}-(?:[0-9a-f]){4}-(?:[0-9a-f]){4}-(?:[0-9a-f]){4}-(?:[0-9a-f]){12}$'
+
+    if re.search(id_re, id):
+        return True
+    else:
+        return False
+
 
 def is_valid_md5_checksum(checksum):
     # checksum is a 32 character long hexadecimal number
     # each character must be either 0-9 or a-f
 
     if checksum.isalnum() and len(checksum) == 32:
-        return True;
+        return re.findall(r"([a-fA-F\d]{32})", checksum)  # regex that returns true only if the letters are a-f
     else:
-        return False;
+        return False
+
+
+def is_valid_macAddress(mac):
+    if re.match("[0-9a-f]{2}([-:])[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac.lower()):
+            return True
+    else:
+            return False

@@ -1,6 +1,7 @@
 from utils import DnaCenter
 from utils import TestCase
 from utils import is_valid_ipv4_address
+from utils import is_valid_32h_id
 import pprint
 import responses
 import requests
@@ -561,6 +562,12 @@ def tc_dna_intent_api_vi_topology_site_topology():
                 check_fields = False
             else:
                 tc.okay(site['locationCountry'] + ':Found expected field:' + field)
+
+                if field == 'id':
+                    if is_valid_32h_id(site['id']):
+                        tc.okay(site['id'] + ' is a valid address')
+                    else:
+                        tc.fail(site['id'] + " INVALID address")
 
                 # Check if the response has an API version field
                 if 'version' in response.json():
