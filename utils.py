@@ -120,6 +120,17 @@ def is_valid_ipv4_address(address):
     else:
         return False
 
+def is_valid_32h_id(id):
+    # a valid id is a 32 character hexadecimal number
+    # it matches the format ########-####-####-####-############
+
+    id_re = r'^(?:[0-9a-f]){8}-(?:[0-9a-f]){4}-(?:[0-9a-f]){4}-(?:[0-9a-f]){4}-(?:[0-9a-f]){12}$'
+
+    if re.search(id_re, id):
+        return True
+    else:
+        return False
+
 
 def is_valid_md5_checksum(checksum):
     # checksum is a 32 character long hexadecimal number
