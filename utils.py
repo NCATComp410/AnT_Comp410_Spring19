@@ -129,3 +129,9 @@ def is_valid_md5_checksum(checksum):
         return True;
     else:
         return False;
+
+def is_valid_macAddress(mac):
+    if re.match("[0-9a-f]{2}([-:])[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac.lower()):
+            return True
+    else:
+            return False
