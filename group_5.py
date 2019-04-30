@@ -458,6 +458,7 @@ def tc_dna_intent_api_v1_network_device_id_vlan():
 
     tc.okay('found ' + str(len(device_list)) + ' devices:' + ','.join(device_list))
 
+    sn_ok = True
     for device_id in device_list:
         rest_cmd = 'dna/intent/api/v1/network-device/' + device_id + '/vlan'
         if not use_mock:
