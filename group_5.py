@@ -263,6 +263,18 @@ def tc_dna_intent_api_v1_network_device():
                     tc.fail('found unexpected serial number ' + sn)
                     pp.pprint(response.json())
                     sn_ok = False
+                    
+                    
+                    # sprint #4 - check the format content of at least one field
+                # In this example each device has a managementIpAddress
+                # We'll check to make sure the format on this is correct
+                # 'managementIpAddress': '10.10.22.70'
+                # This is an example of an ipv4 ip address
+                if is_valid_ipv4_address(device['managementIpAddress']):
+                    tc.okay(device['managementIpAddress'] + ' is a valid address')
+                else:
+                    tc.fail(device['managementIpAddress'] + ' INVALID address')
+                    
     if sn_ok:
         tc.okay('serial numbers correct')
 
@@ -465,29 +477,9 @@ def tc_dna_intent_api_v1_network_device_id_vlan():
             tc.fail('expected 200-OK actual response was ' + str(response.status_code))
         else:
            
-            for device in response.json()['response']:
-                # expect response to be restricted to only the serialNumber we requested
-                # if it is not, this is a failure
-                if sn != device['serialNumber']:
-                    tc.fail('found unexpected serial number ' + sn)
-                    pp.pprint(response.json())
-                    sn_ok = False
-
-                # sprint #4 - check the format content of at least one field
-                # In this example each device has a managementIpAddress
-                # We'll check to make sure the format on this is correct
-                # 'managementIpAddress': '10.10.22.70'
-                # This is an example of an ipv4 ip address
-                if is_valid_ipv4_address(device['managementIpAddress']):
-                    tc.okay(device['managementIpAddress'] + ' is a valid address')
-                else:
-                    tc.fail(device['managementIpAddress'] + ' INVALID address')
-            
-       
-        
-        for field in response.json()['response']:
-            # print list of fields found in this response
-            print(field.keys())
+            for field in response.json()['response']:
+                # print list of fields found in this response
+                print(field.keys())
             
     if sn_ok:
         tc.okay('serial numbers correct')
