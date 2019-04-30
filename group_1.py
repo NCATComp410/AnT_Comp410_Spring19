@@ -565,9 +565,9 @@ def tc_dna_intent_api_vi_topology_site_topology():
 
                 if field == 'id':
                     if is_valid_32h_id(site['id']):
-                        tc.okay(site['id'] + ' is a valid address')
+                        tc.okay(site['id'] + ' is a valid id')
                     else:
-                        tc.fail(site['id'] + " INVALID address")
+                        tc.fail(site['id'] + " INVALID id")
 
                 # Check if the response has an API version field
                 if 'version' in response.json():
