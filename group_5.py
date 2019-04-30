@@ -386,6 +386,8 @@ def tc_dna_intent_api_v1_network_device_collection_schedule_global():
 
 
 def get_unique_device_id(dnac):
+    
+    tc = TestCase(test_name='IntentApiV1NetworkDeviceCount', yaml_file='params.yaml')
     rest_cmd = 'dna/intent/api/v1/network-device'
     if not use_mock:
         # execute the command and get response
