@@ -528,8 +528,8 @@ def tc_dna_intent_api_v1_interface_network_device_range():
             response = requests.get('http://' + rest_cmd)
             
         if response.status_code != 200:
-        # this test should fail if any other response code received
-        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+            # this test should fail if any other response code received
+            tc.fail('expected 200-OK actual response was ' + str(response.status_code))
         else:
             for field in response.json()['response']:
                 # show the fields in this response
