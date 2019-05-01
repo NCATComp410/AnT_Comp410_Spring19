@@ -219,6 +219,11 @@ def tc_dna_intent_api_v1_file_namespace_swimfiles():
             else:
                 tc.okay('Found expected field: ' + field)
 
+    if is_valid_md5_checksum(swim_file['md5Checksum']):
+        tc.okay(swim_file['md5Checksum'] + ' is a valid md5Checksum' + '\n\033[32m' + 'Validation Success' + '\033[0m')
+    else:
+        tc.fail(swim_file['md5Checksum'] + ' is NOT a valid md5Checksum' + '\n\033[31m' + 'Validation Failure' + '\033[0m')
+
     # complete
     tc.okay('complete')
 
@@ -257,7 +262,10 @@ def tc_dna_intent_api_v1_file_namespace_ejbca():
         for field in expected_fields:
             if field not in ejbca.keys():
                 tc.fail(field + ' expected but not found')
-
+    if is_valid_md5_checksum(ejbca['md5Checksum']):
+        tc.okay(ejbca['md5Checksum'] + ' is a valid md5Checksum' + '\n\033[32m' + 'Validation Success' + '\033[0m')
+    else:
+        tc.fail(ejbca['md5Checksum'] + ' is NOT a valid md5Checksum' + '\n\033[31m' + 'Validation Failure' + '\033[0m')
     # complete
     tc.okay('complete')
 
@@ -289,10 +297,9 @@ def run_all_tests():
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
-    # add new test cases to be run here
-    # tc_dna_intent_api_v1_file_namespace_pki_trustpool()
-    # tc_dna_intent_api_v1_file_namespace_swimfiles()
-    # tc_dna_intent_api_v1_file_namespace_ejbca()
+    tc_dna_intent_api_v1_file_namespace_pki_trustpool()
+    tc_dna_intent_api_v1_file_namespace_swimfiles()
+    tc_dna_intent_api_v1_file_namespace_ejbca()
 
 
 run_all_tests()
