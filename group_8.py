@@ -240,7 +240,7 @@ def tc_dna_intent_api_v1_network_device_config_device():
 use_mock = False
 #
 # (2) Uncomment the following line to activate the responses module:
-#responses.activate
+responses.activate
 #
 # Once these two things have been done you will use the mock instead
 # of the real DNA-C.  It's important to know how do this since the
