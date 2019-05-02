@@ -1,4 +1,4 @@
-from utils import DnaCenter
+from utils import DnaCenter, is_valid_macAddress
 from utils import TestCase
 import responses
 import requests
@@ -230,23 +230,42 @@ def tc_dna_intent_api_v1_network_device_config_count():
                       status=200)
         response = requests.get('http://' + rest_cmd)
 
-    if response.status_code == 200:
+    if response.status_code != 200:
         print("Correct status code")
         print("Status code =",response.status_code)
     # pp.pprint(response.json())
     else:
-        print("Incorrect status code")
-        print("Status code =", response.status_code)
+        pp.pprint(response.json())
 
-    pp.pprint(response.json())
+        check_fields = True
+        expected_fields = ['rolesource', 'associatedWlcIp', 'bootDateTime', 'collectionStatus', 'family', 'managementIpAddress', 'memorySize', 'series','softwareType', 'serialNumber', 'softwareVersion', 'hostname', 'inventoryStatusDetail']
+        for device in response.json()['response']:
+            device_fields = device.keys()
+            for field in expected_fields:
+                if field not in device_fields:
+                    tc.fail(field + ' was expected but not found in the DNA-C results')
+                    check_fields = False
+                else:
+                    tc.okay(':Found expected field:' + field)
 
-    expected_fields = ['response', 'version']
-    for field in expected_fields:
-        if field not in response.json():
-            tc.fail(field + ' was not found')
+            # If all fields checked out OK
+        if check_fields:
+            tc.okay('all expected device fields were found')
 
-    # complete
-    tc.okay('complete')
+        for device in response.json()['response']:
+            pp.pprint(device.keys);
+        # complete
+        # Sprint 4 - check the format content of macAddress
+
+        if is_valid_macAddress(device['macAddress']):
+            tc.okay(device['macAddress'] + ' is a valid macAddress')
+
+        else:
+            tc.fail(device['macAddress'] + ' is NOT a valid macAddress')
+        tc.okay('complete')
+
+        # complete
+        tc.okay('complete')
 
 
 def tc_dna_intent_api_v1_network_device_config_device():
