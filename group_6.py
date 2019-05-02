@@ -62,6 +62,7 @@ def tc_dna_intent_api_v1_network_device_count():
         actual_version = response.json()['version']
         if expected_version == actual_version:
             tc.okay('correct version found')
+            print(actual_version)
         else:
             tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
@@ -116,10 +117,23 @@ def tc_dna_intent_api_v1_file_namespace():
     if check_fields:
         tc.okay('all expected device values were found')
 
+
     # complete
     tc.okay('complete')
+    #SPRINT #4
+    check_Version=True
+    expected_version_value=[1]
+    versions = response.json()['version']
+    for version in versions:
+        if version not in expected_version_value:
+            tc.fail(version + 'was expected but not found in DNA-C result')
+            print(versions)
+            check_Version=False
+        else:
+            tc.okay('Found expected value: '+ version)
 
-
+    if check_Version:
+        tc.okay('all expected version values were found')
 def tc_dna_intent_api_v1_file_namespace_network_device_export():
     # create this test case
     tc = TestCase(test_name='IntentApiV1FileNamespaceNetworkDeviceExport', yaml_file='params.yaml')
@@ -210,7 +224,7 @@ use_mock = False
 #
 def run_all_tests():
     # run this test case first since it will do a basic 'ping'
-    #tc_dna_intent_api_v1_network_device_count()
+    tc_dna_intent_api_v1_network_device_count()
 
     # add new test cases to be run here
     tc_dna_intent_api_v1_file_namespace()
