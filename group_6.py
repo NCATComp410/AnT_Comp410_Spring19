@@ -120,20 +120,16 @@ def tc_dna_intent_api_v1_file_namespace():
 
     # complete
     tc.okay('complete')
-    #SPRINT #4
+    # #SPRINT #4
     check_Version=True
-    expected_version_value=[1]
-    versions = response.json()['version']
-    for version in versions:
-        if version not in expected_version_value:
-            tc.fail(version + 'was expected but not found in DNA-C result')
-            print(versions)
-            check_Version=False
-        else:
-            tc.okay('Found expected value: '+ version)
+    expected_version_value='1.0'
+    actualversions = response.json()['version']
+    if expected_version_value==actualversions:
+        tc.okay('Correct Version Found')
+        print(actualversions)
+    else:
+        tc.fail(f'expected version{expected_version_value} instead found {actualversions}')
 
-    if check_Version:
-        tc.okay('all expected version values were found')
 def tc_dna_intent_api_v1_file_namespace_network_device_export():
     # create this test case
     tc = TestCase(test_name='IntentApiV1FileNamespaceNetworkDeviceExport', yaml_file='params.yaml')
@@ -210,10 +206,10 @@ def tc_dna_intent_api_v1_file_namespace_ivm_kgv():
 # (1) Be sure to set use_mock = True
 #     For normal operation use_mock = False
 #     Don't check-in the code with use_mock = True!
-use_mock = False
+use_mock = True
 #
 # (2) Uncomment the following line to activate the responses module:
-#@responses.activate
+@responses.activate
 #
 # Once these two things have been done you will use the mock instead
 # of the real DNA-C.  It's important to know how do this since the
