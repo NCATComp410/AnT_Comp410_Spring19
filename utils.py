@@ -109,6 +109,14 @@ class TestCase:
         return self.name
 
 
+def is_functionh(hostname):
+
+    if (hostname == 'asr1001-x') or (hostname == 'cat_9k_1') or (hostname == 'cat_9k_2') or (hostname == 'cs3850'):
+        return True
+    else:
+        return False
+
+        
 def is_valid_ipv4_address(address):
     # create a regex that matches an ipv4 address
     # 000.000.000.000 is the format
@@ -119,7 +127,6 @@ def is_valid_ipv4_address(address):
         return True
     else:
         return False
-
 
 def is_valid_md5_checksum(checksum):
     # checksum is a 32 character long hexadecimal number
