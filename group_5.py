@@ -4,6 +4,8 @@ import pprint
 import responses
 import requests
 from utils import is_valid_ipv4_address
+from utils import is_functionh
+
 
 
 # define a pretty-printer for diagnostics
@@ -133,7 +135,7 @@ def tc_dna_intent_api_v1_network_device():
     print(','.join(host_list))
     print('Serial Numbers:')
     pp.pprint(serialNumber_list)
-    
+
     # Get a list of available fields from the response for each device
     check_fields = True
     expected_fields = ['type', 'errorCode', 'family', 'location', 'role', 'errorDescription', 'lastUpdateTime', 'lastUpdated', 'tagCount', 'inventoryStatusDetail', 'macAddress', 'hostname', 'serialNumber', 'softwareVersion', 'locationName', 'upTime', 'softwareType', 'collectionInterval', 'roleSource', 'apManagerInterfaceIp', 'associatedWlcIp', 'bootDateTime', 'collectionStatus', 'interfaceCount', 'lineCardCount', 'lineCardId', 'managementIpAddress', 'memorySize', 'platformId', 'reachabilityFailureReason', 'reachabilityStatus', 'series', 'snmpContact', 'snmpLocation', 'tunnelUdpPort', 'waasDeviceMode', 'instanceUuid', 'instanceTenantId', 'id']
@@ -263,18 +265,29 @@ def tc_dna_intent_api_v1_network_device():
                     tc.fail('found unexpected serial number ' + sn)
                     pp.pprint(response.json())
                     sn_ok = False
-                    
-                    
+
                     # sprint #4 - check the format content of at least one field
                 # In this example each device has a managementIpAddress
                 # We'll check to make sure the format on this is correct
                 # 'managementIpAddress': '10.10.22.70'
                 # This is an example of an ipv4 ip address
-                if is_valid_ipv4_address(device['managementIpAddress']):
-                    tc.okay(device['managementIpAddress'] + ' is a valid address')
+                if is_functionh(device['hostname']):
+                    tc.okay(device['hostname'] + ' is a valid host')
                 else:
-                    tc.fail(device['managementIpAddress'] + ' INVALID address')
-                    
+                    tc.fail(device['hostname'] + ' INVALID host')
+
+
+
+                    # sprint #4 - check the format content of at least one field
+                # In this example each device has a managementIpAddress
+                # We'll check to make sure the format on this is correct
+                # 'managementIpAddress': '10.10.22.70'
+                # This is an example of an ipv4 ip address
+                #if is_valid_ipv4_address(device['managementIpAddress']):
+                    #tc.okay(device['managementIpAddress'] + ' is a valid address')
+                #else:
+                    #tc.fail(device['managementIpAddress'] + ' INVALID address')
+
     if sn_ok:
         tc.okay('serial numbers correct')
 
@@ -376,7 +389,7 @@ def tc_dna_intent_api_v1_network_device_collection_schedule_global():
                       json=json_mock,
                       status=200)
         response = requests.get('http://' + rest_cmd)
-        
+
     if response.status_code != 200:
         # this test should fail if any other response code received
        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
@@ -393,12 +406,12 @@ def tc_dna_intent_api_v1_network_device_collection_schedule_global():
             # tests will fail, so, consider this a critical failure and abort here by
             # setting abort=True
             tc.fail('no devices were found', abort=True)
-    
-   
+
+
 
 
 def get_unique_device_id(dnac):
-    
+
     tc = TestCase(test_name='IntentApiV1NetworkDeviceCount', yaml_file='params.yaml')
     rest_cmd = 'dna/intent/api/v1/network-device'
     if not use_mock:
@@ -411,7 +424,7 @@ def get_unique_device_id(dnac):
                       json=json_mock,
                       status=200)
         response = requests.get('http://' + rest_cmd)
-    
+
    # Check to see if a response other than 200-OK was received
     if response.status_code != 200:
         # this test should fail if any other response code received
@@ -470,18 +483,18 @@ def tc_dna_intent_api_v1_network_device_id_vlan():
                           json=json_mock,
                           status=200)
             response = requests.get('http://' + rest_cmd)
-           
-            
-            
+
+
+
         if response.status_code != 200:
             # this test should fail if any other response code received
             tc.fail('expected 200-OK actual response was ' + str(response.status_code))
         else:
-           
+
             for field in response.json()['response']:
                 # print list of fields found in this response
                 print(field.keys())
-            
+
     if sn_ok:
         tc.okay('serial numbers correct')
     # complete
@@ -521,7 +534,7 @@ def tc_dna_intent_api_v1_interface_network_device_range():
                           json=json_mock,
                           status=200)
             response = requests.get('http://' + rest_cmd)
-            
+
         if response.status_code != 200:
             # this test should fail if any other response code received
             tc.fail('expected 200-OK actual response was ' + str(response.status_code))
@@ -532,7 +545,7 @@ def tc_dna_intent_api_v1_interface_network_device_range():
         # complete
         tc.okay('complete')
 
-    
+
 
 
 def tc_dna_intent_api_v1_network_device_module():
@@ -556,11 +569,11 @@ def tc_dna_intent_api_v1_network_device_module():
                       json=json_mock,
                       status=200)
         response = requests.get('http://' + rest_cmd)
-        
+
     if response.status_code != 200:
         # this test should fail if any other response code received
         tc.fail('expected 200-OK actual response was ' + str(response.status_code))
-    else:    
+    else:
         # get the unique module IDs
         module_list = []
         for device in response.json()['response']:
@@ -579,7 +592,7 @@ def tc_dna_intent_api_v1_network_device_module():
                               json=json_mock,
                               status=200)
                 response = requests.get('http://' + rest_cmd)
-                
+
             if response.status_code != 200:
              # this test should fail if any other response code received
              tc.fail('expected 200-OK actual response was ' + str(response.status_code))
@@ -616,13 +629,13 @@ def run_all_tests():
         print('use_mock is set to False - Using DNA-C')
 
     # run this test case first since it will do a basic 'ping'
-    tc_dna_intent_api_v1_network_device_count()
+    tc_dna_intent_api_v1_network_device()
 
     # # add new test cases to be run here
-    tc_dna_intent_api_v1_network_device_collection_schedule_global()
-    tc_dna_intent_api_v1_network_device_id_vlan()
-    tc_dna_intent_api_v1_interface_network_device_range()
-    tc_dna_intent_api_v1_network_device_module()
+    #tc_dna_intent_api_v1_network_device_collection_schedule_global()
+    #tc_dna_intent_api_v1_network_device_id_vlan()
+    #tc_dna_intent_api_v1_interface_network_device_range()
+    #tc_dna_intent_api_v1_network_device_module()
 
 
 run_all_tests()
