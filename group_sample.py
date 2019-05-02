@@ -127,9 +127,11 @@ def tc_dna_intent_api_v1_network_device():
         if device['hostname']:
             host_list.append(device['hostname'])
             serialNumber_list.append(device['serialNumber'])
+        else:
+            print('Empty hostname found')
 
     # list of hosts and serial numbers found
-    print('Hosts Found:')
+    print('Hosts Found:' + str(len(host_list)))
     pp.pprint(host_list)
     print(','.join(host_list))
     print('Serial Numbers:')
@@ -143,10 +145,10 @@ def tc_dna_intent_api_v1_network_device():
         device_fields = device.keys()
         for field in expected_fields:
             if field not in device_fields:
-                tc.fail(device['hostname'] + ':' + field + ' was expected but not found in the DNA-C results')
+                tc.fail(str(device['hostname']) + ':' + field + ' was expected but not found in the DNA-C results')
                 check_fields = False
             else:
-                tc.okay(device['hostname'] + ':Found expected field:' + field)
+                tc.okay(str(device['hostname']) + ':Found expected field:' + field)
 
     # If all fields checked out OK
     if check_fields:
@@ -309,10 +311,10 @@ def tc_dna_intent_api_v1_network_device():
 # (1) Be sure to set use_mock = True
 #     For normal operation use_mock = False
 #     Don't check-in the code with use_mock = True!
-use_mock = True
+use_mock = False
 #
 # (2) Uncomment the following line to activate the responses module:
-@responses.activate
+#responses.activate
 #
 # Once these two things have been done you will use the mock instead
 # of the real DNA-C.  It's important to know how do this since the

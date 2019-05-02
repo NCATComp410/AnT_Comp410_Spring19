@@ -1,5 +1,6 @@
 from utils import DnaCenter
 from utils import TestCase
+from utils import is_valid_md5_checksum
 import pprint
 import responses
 import requests
@@ -93,8 +94,20 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
         # The json_mock is something which was saved in responses.log during a successful session
         # It is much easier to build this way than to build it from scratch!
 
-        #edited mock
-        json_mock = {'response': [{'nameSpace': 'pki-trustpool', 'name': 'iostruststore.jks', 'downloadPath': '/file/b5516810-6c23-4bc1-be7e-ffd284fce53e', 'fileSize': '162280', 'fileFormat': 'application/x-java-keystore', 'md5Checksum': '1dac1a2acf0253f983eb61a51e7aa250', 'sha1Checksum': 'c4582142ff74967c1202e3c0a5b95292f08eb5b7', 'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472', 'downloadurl': '/pki-trustpool/b5516810-6c23-4bc1-be7e-ffd284fce53e/iostruststore.jks', 'status': 'SUCCESS', 'createTimeStamp': '10/30/2018 21:00:13', 'updateTimeStamp': '10/30/2018 21:00:13', 'id': 'fdf9d059-b4b8-4b78-b79d-e0aa291ecd3b'}], 'id': 'b5516810-6c23-4bc1-be7e-ffd284fce53e'}], 'version': '1.0'}
+        # edited mock
+        json_mock = {'response': [{'nameSpace': 'pki-trustpool', 'name': 'iostruststore.jks',
+                                   'downloadPath': '/file/b5516810-6c23-4bc1-be7e-ffd284fce53e',
+                                   'fileSize': '162280', 'fileFormat': 'application/x-java-keystore',
+                                   'md5Checksum': '1dac1a2acf0253f983eb61a51e7aa250',
+                                   'sha1Checksum': 'c4582142ff74967c1202e3c0a5b95292f08eb5b7',
+                                   'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472',
+                                                       'downloadurl': '/pki-trustpool/b5516810-6c23-4bc1-be7e-ffd284fce53e/iostruststore.jks',
+                                                       'status': 'SUCCESS',
+                                                       'createTimeStamp': '10/30/2018 21:00:13',
+                                                       'updateTimeStamp': '10/30/2018 21:00:13',
+                                                       'id': 'fdf9d059-b4b8-4b78-b79d-e0aa291ecd3b'}],
+                                   'id': 'b5516810-6c23-4bc1-be7e-ffd284fce53e'}],
+                     'version': '1.0'}
 
         # instead of actually talking to the DNA-C we're going to mock-up the response
         # this command inserts our mock-up which will be retrieved by response as though it was real
@@ -110,15 +123,14 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
     else:
         pp.pprint(response.json())
 
-    #Checks what the expected fields are
+    # Checks what the expected fields are
     for device in response.json()['response']:
         device_fields = device.keys()
         print(device_fields)
 
-
     check_fields = True
 
-    #Checking if all the fields were actually found
+    # Checking if all the fields were actually found
     expected_fields = ['nameSpace', 'name', 'downloadPath', 'fileSize', 'fileFormat', 'md5Checksum', 'sha1Checksum', 'sftpServerList', 'id']
     for device in response.json()['response']:
         device_fields = device.keys()
@@ -133,6 +145,11 @@ def tc_dna_intent_api_v1_file_namespace_pki_trustpool():
     if check_fields:
         tc.okay('all expected device fields were found')
 
+    # Sprint 4 - validates the checksum to make sure its a 32 hex character string (0-9/a-f)
+    if is_valid_md5_checksum(device['md5Checksum']):
+        tc.okay(device['md5Checksum'] + ' is a valid md5Checksum' + '\n\033[32m' + 'Validation Success' + '\033[0m')
+    else:
+        tc.fail(device['md5Checksum'] + ' is NOT a valid md5Checksum' + '\n\033[31m' + 'Validation Failure' + '\033[0m')
     # complete
     tc.okay('complete')
 
@@ -145,7 +162,7 @@ def tc_dna_intent_api_v1_file_namespace_swimfiles():
     rest_cmd = intent_api + 'api/v1/file/namespace/swimfiles'
 
     if not use_mock:
-    # create a session to the DNA-C
+        # create a session to the DNA-C
         dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
                          port=tc.params['DnaCenter']['Port'],
                          username=tc.params['DnaCenter']['Username'],
@@ -154,7 +171,35 @@ def tc_dna_intent_api_v1_file_namespace_swimfiles():
         # execute the command and get response
         response = dnac.get(rest_cmd)
     else:
-        json_mock = {'response': [{'nameSpace': 'swimfiles', 'name': 'file-transfer-check.tmp', 'downloadPath': '/file/5aa7a941-cabf-4d78-8f45-8800d26a48e0', 'fileSize': '19', 'fileFormat': 'text/plain', 'md5Checksum': 'b5fe848cf61724367656506b512cef25', 'sha1Checksum': 'cf4f3d8b5464ba3f73e292934aa30fb35aa0a418', 'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472', 'downloadurl': '/swimfiles/5aa7a941-cabf-4d78-8f45-8800d26a48e0/file-transfer-check.tmp', 'status': 'SUCCESS', 'createTimeStamp': '10/31/2018 11:18:45', 'updateTimeStamp': '10/31/2018 11:18:45', 'id': '8c5fde91-b87d-4ced-8c36-c0d4a3558883'}], 'id': '5aa7a941-cabf-4d78-8f45-8800d26a48e0'}, {'nameSpace': 'swimfiles', 'name': 'cat9k_iosxe.16.06.04a.SPA.bin', 'downloadPath': '/file/e8a96020-843a-4159-b20f-8882251621bb', 'fileSize': '597598927', 'fileFormat': 'application/octet-stream', 'md5Checksum': 'cee173ca374a8a388557c590eb3af680', 'sha1Checksum': '844d3805cd566e292ffd1f0d1f4ed76c2938ab7f', 'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472', 'downloadurl': '/swimfiles/e8a96020-843a-4159-b20f-8882251621bb/cat9k_iosxe.16.06.04a.SPA.bin', 'status': 'SUCCESS', 'createTimeStamp': '11/30/2018 06:25:05', 'updateTimeStamp': '11/30/2018 06:25:05', 'id': '5034419e-5b94-48e8-8f4f-5991a164bbb7'}], 'id': 'e8a96020-843a-4159-b20f-8882251621bb'}], 'version': '1.0'}
+        json_mock = {'response': [{'nameSpace': 'swimfiles',
+                                   'name': 'file-transfer-check.tmp',
+                                   'downloadPath': '/file/5aa7a941-cabf-4d78-8f45-8800d26a48e0',
+                                   'fileSize': '19',
+                                   'fileFormat': 'text/plain',
+                                   'md5Checksum': 'b5fe848cf61724367656506b512cef25',
+                                   'sha1Checksum': 'cf4f3d8b5464ba3f73e292934aa30fb35aa0a418',
+                                   'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472',
+                                                       'downloadurl': '/swimfiles/5aa7a941-cabf-4d78-8f45-8800d26a48e0/file-transfer-check.tmp',
+                                                       'status': 'SUCCESS',
+                                                       'createTimeStamp': '10/31/2018 11:18:45',
+                                                       'updateTimeStamp': '10/31/2018 11:18:45',
+                                                       'id': '8c5fde91-b87d-4ced-8c36-c0d4a3558883'}],
+                                   'id': '5aa7a941-cabf-4d78-8f45-8800d26a48e0'},
+                                  {'nameSpace': 'swimfiles',
+                                   'name': 'cat9k_iosxe.16.06.04a.SPA.bin',
+                                   'downloadPath': '/file/e8a96020-843a-4159-b20f-8882251621bb',
+                                   'fileSize': '597598927',
+                                   'fileFormat': 'application/octet-stream',
+                                   'md5Checksum': 'cee173ca374a8a388557c590eb3af680',
+                                   'sha1Checksum': '844d3805cd566e292ffd1f0d1f4ed76c2938ab7f',
+                                   'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472',
+                                                       'downloadurl': '/swimfiles/e8a96020-843a-4159-b20f-8882251621bb/cat9k_iosxe.16.06.04a.SPA.bin',
+                                                       'status': 'SUCCESS',
+                                                       'createTimeStamp': '11/30/2018 06:25:05',
+                                                       'updateTimeStamp': '11/30/2018 06:25:05',
+                                                       'id': '5034419e-5b94-48e8-8f4f-5991a164bbb7'}],
+                                   'id': 'e8a96020-843a-4159-b20f-8882251621bb'}],
+                     'version': '1.0'}
         responses.add(responses.GET, 'http://' + rest_cmd,
                       json=json_mock,
                       status=200)
@@ -169,8 +214,15 @@ def tc_dna_intent_api_v1_file_namespace_swimfiles():
     expected_fields = ['nameSpace', 'name', 'downloadPath', 'fileSize', 'fileFormat', 'md5Checksum', 'sha1Checksum', 'sftpServerList', 'id']
     for swim_file in response.json()['response']:
         for field in expected_fields:
-            if field not in swim_file.keys():
+            if field not in expected_fields: # swim_file.keys():
                 tc.fail(field + ' expected but not found')
+            else:
+                tc.okay('Found expected field: ' + field)
+
+    if is_valid_md5_checksum(swim_file['md5Checksum']):
+        tc.okay(swim_file['md5Checksum'] + ' is a valid md5Checksum' + '\n\033[32m' + 'Validation Success' + '\033[0m')
+    else:
+        tc.fail(swim_file['md5Checksum'] + ' is NOT a valid md5Checksum' + '\n\033[31m' + 'Validation Failure' + '\033[0m')
 
     # complete
     tc.okay('complete')
@@ -210,7 +262,10 @@ def tc_dna_intent_api_v1_file_namespace_ejbca():
         for field in expected_fields:
             if field not in ejbca.keys():
                 tc.fail(field + ' expected but not found')
-
+    if is_valid_md5_checksum(ejbca['md5Checksum']):
+        tc.okay(ejbca['md5Checksum'] + ' is a valid md5Checksum' + '\n\033[32m' + 'Validation Success' + '\033[0m')
+    else:
+        tc.fail(ejbca['md5Checksum'] + ' is NOT a valid md5Checksum' + '\n\033[31m' + 'Validation Failure' + '\033[0m')
     # complete
     tc.okay('complete')
 
@@ -223,7 +278,7 @@ def tc_dna_intent_api_v1_file_namespace_ejbca():
 use_mock = False
 #
 # (2) Uncomment the following line to activate the responses module:
-#@responses.activate
+# @responses.activate
 #
 # Once these two things have been done you will use the mock instead
 # of the real DNA-C.  It's important to know how do this since the
@@ -242,7 +297,6 @@ def run_all_tests():
     # run this test case first since it will do a basic 'ping'
     tc_dna_intent_api_v1_network_device_count()
 
-    # add new test cases to be run here
     tc_dna_intent_api_v1_file_namespace_pki_trustpool()
     tc_dna_intent_api_v1_file_namespace_swimfiles()
     tc_dna_intent_api_v1_file_namespace_ejbca()

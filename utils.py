@@ -6,12 +6,15 @@ import re
 
 # Disable insecure warnings
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # basic debug print utility
 # set verbose=True to enable debug messages
 # set verbose=False to turn them off
 verbose = False
+
+
 def dbprint(msg):
     if verbose:
         print('dbprint:', end='')
@@ -46,7 +49,7 @@ class DnaCenter:
     # this function will log the result of each get and response
     def __log_result(self, url, response):
         d = datetime.now()
-        with open ('response.log', 'a') as f:
+        with open('response.log', 'a') as f:
             print(d.isoformat(), file=f)
             print(url, file=f)
             print(response, file=f)
@@ -117,8 +120,30 @@ def is_valid_ipv4_address(address):
     else:
         return False
 
+def is_valid_32h_id(id):
+    # a valid id is a 32 character hexadecimal number
+    # it matches the format ########-####-####-####-############
+
+    id_re = r'^(?:[0-9a-f]){8}-(?:[0-9a-f]){4}-(?:[0-9a-f]){4}-(?:[0-9a-f]){4}-(?:[0-9a-f]){12}$'
+
+    if re.search(id_re, id):
+        return True
+    else:
+        return False
 
 
+def is_valid_md5_checksum(checksum):
+    # checksum is a 32 character long hexadecimal number
+    # each character must be either 0-9 or a-f
+
+    if checksum.isalnum() and len(checksum) == 32:
+        return re.findall(r"([a-fA-F\d]{32})", checksum)  # regex that returns true only if the letters are a-f
+    else:
+        return False
 
 
-
+def is_valid_macAddress(mac):
+    if re.match("[0-9a-f]{2}([-:])[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", mac.lower()):
+            return True
+    else:
+            return False
