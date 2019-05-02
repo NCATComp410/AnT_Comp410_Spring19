@@ -382,9 +382,9 @@ def run_all_tests():
 
     # add new test cases to be run here
     tc_dna_intent_api_v1_interface()
-    #tc_dna_intent_api_v1_interface_network_device()
-    #tc_dna_intent_api_v1_interface_count()
-    #tc_dna_intent_api_v1_network_device()
+    tc_dna_intent_api_v1_interface_network_device()
+    tc_dna_intent_api_v1_interface_count()
+    tc_dna_intent_api_v1_network_device()
 
 
 run_all_tests()

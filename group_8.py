@@ -133,9 +133,9 @@ def tc_dna_intent_api_v1_network_device_config():
         for field in expected_fields:
             if field not in device_fields:
                 tc.fail(field + ' was not found')
-                #tc.fail(device['hostname'] + ':' + field + ' was expected but not found in the DNA-C results')
+                tc.fail(device['hostname'] + ':' + field + ' was expected but not found in the DNA-C results')
                 check_fields = False
-                #print(field,  " not present")
+                print(field,  " not present")
             else:
                 # tc.okay(device['hostname'] + ':Found expected field:' + field)
                 print(field, " check")
@@ -163,7 +163,68 @@ def tc_dna_intent_api_v1_network_device_config_count():
         # execute the command and get response
         response = dnac.get(rest_cmd)
     else:
-        json_mock = {'response': 4, 'version': '1.0'}
+        json_mock = {'response': [{'roleSource': 'AUTO', 'associatedWlcIp': '', 'bootDateTime': '2019-02-19 19:40:52',
+                                   'collectionStatus': 'Managed', 'family': 'Switches and Hubs', 'interfaceCount': '59',
+                                   'lineCardCount': '2',
+                                   'lineCardId': 'f0665a2b-82f5-470d-b8ce-f684e19f87d3, '
+                                                 '31db9454-d1c5-45a1-bcba-5b4742c0682d',
+                                   'managementIpAddress': '10.10.22.73', 'memorySize': '873744896',
+                                   'platformId': 'WS-C3850-48U-E', 'reachabilityFailureReason': '',
+                                   'reachabilityStatus': 'Reachable',
+                                   'series': 'Cisco Catalyst 3850 Series Ethernet Stackable Switch', 'snmpContact': '',
+                                   'snmpLocation': '', 'tunnelUdpPort': None, 'waasDeviceMode': None,
+                                   'apManagerInterfaceIp': '', 'errorCode': None,
+                                   'type': 'Cisco Catalyst38xx stack-able ethernet switch', 'location': None,
+                                   'role': 'DISTRIBUTION', 'upTime': '6 days, 1:38:42.81', 'errorDescription': None,
+                                   'lastUpdateTime': 1554130060502, 'softwareType': 'IOS-XE',
+                                   'serialNumber': 'FOC1833X0AR', 'softwareVersion': '16.6.2s',
+                                   'lastUpdated': '2019-04-01 14:47:40', 'hostname': 'Adam_TEST.corpaa.aa.com',
+                                   'inventoryStatusDetail': '<status><general code="SUCCESS"/></status>',
+                                   'tagCount': '0', 'macAddress': 'cc:d8:c1:15:d2:80', 'locationName': None,
+                                   'collectionInterval': 'Global Default',
+                                   'instanceUuid': '7bce6b93-2c1f-4bfc-9383-bfdeb4d819dd',
+                                   'instanceTenantId': '5bd3634ab2bea0004c3ebb58',
+                                   'id': '7bce6b93-2c1f-4bfc-9383-bfdeb4d819dd'},
+                                  {'roleSource': 'AUTO', 'associatedWlcIp': '', 'bootDateTime': '2019-02-20 15:15:25',
+                                   'collectionStatus': 'In Progress', 'family': 'Switches and Hubs',
+                                   'interfaceCount': '41', 'lineCardCount': '2',
+                                   'lineCardId': '98d722c0-9b3f-4d34-817b-71e0601ffc5e, '
+                                                 '090f9ad3-2c08-4de6-8bb0-721795597392',
+                                   'managementIpAddress': '10.10.22.66', 'memorySize': '889226872',
+                                   'platformId': 'C9300-24UX', 'reachabilityFailureReason': '',
+                                   'reachabilityStatus': 'Reachable', 'series': 'Cisco Catalyst 9300 Series Switches',
+                                   'snmpContact': '', 'snmpLocation': '', 'tunnelUdpPort': None, 'waasDeviceMode': None,
+                                   'apManagerInterfaceIp': '', 'errorCode': None, 'type': 'Cisco Catalyst 9300 Switch',
+                                   'location': None, 'role': 'ACCESS', 'upTime': '39 days, 23:12:08.95',
+                                   'errorDescription': None, 'lastUpdateTime': 1554128820850, 'softwareType': 'IOS-XE',
+                                   'serialNumber': 'FCW2136L0AK', 'softwareVersion': '16.6.1',
+                                   'lastUpdated': '2019-04-01 14:27:00', 'hostname': 'Adam_TEST.corpaa.aa.com',
+                                   'inventoryStatusDetail': '<status><general code="SYNC"/></status>', 'tagCount': '0',
+                                   'macAddress': 'f8:7b:20:67:62:80', 'locationName': None,
+                                   'collectionInterval': 'Global Default',
+                                   'instanceUuid': '21107199-8940-4a8a-99f2-6067ab925f6d',
+                                   'instanceTenantId': '5bd3634ab2bea0004c3ebb58',
+                                   'id': '21107199-8940-4a8a-99f2-6067ab925f6d'},
+                                  {'roleSource': 'AUTO', 'associatedWlcIp': '', 'bootDateTime': '2019-02-19 19:44:10',
+                                   'collectionStatus': 'Managed', 'family': 'Switches and Hubs', 'interfaceCount': '41',
+                                   'lineCardCount': '2',
+                                   'lineCardId': 'facf605f-696d-4905-88ea-2d5a4af0344e, '
+                                                 '240100d8-7e15-43f9-94a4-797f530ab0a3',
+                                   'managementIpAddress': '10.10.22.70', 'memorySize': '1425966824',
+                                   'platformId': 'C9300-24UX', 'reachabilityFailureReason': '',
+                                   'reachabilityStatus': 'Reachable', 'series': 'Cisco Catalyst 9300 Series Switches',
+                                   'snmpContact': '', 'snmpLocation': '', 'tunnelUdpPort': None, 'waasDeviceMode': None,
+                                   'apManagerInterfaceIp': '', 'errorCode': None, 'type': 'Cisco Catalyst 9300 Switch',
+                                   'location': None, 'role': 'ACCESS', 'upTime': '40 days, 18:57:21.50',
+                                   'errorDescription': None, 'lastUpdateTime': 1554129817999, 'softwareType': 'IOS-XE',
+                                   'serialNumber': 'FCW2140L039', 'softwareVersion': '16.6.4a',
+                                   'lastUpdated': '2019-04-01 14:43:37', 'hostname': 'Adam_TEST.corpaa.aa.com',
+                                   'inventoryStatusDetail': '<status><general code="SUCCESS"/></status>',
+                                   'tagCount': '0', 'macAddress': 'f8:7b:20:71:4d:80', 'locationName': None,
+                                   'collectionInterval': 'Global Default',
+                                   'instanceUuid': '026bc0a3-4e2f-4deb-8f11-6bd005ca3c7b',
+                                   'instanceTenantId': '5bd3634ab2bea0004c3ebb58',
+                                   'id': '026bc0a3-4e2f-4deb-8f11-6bd005ca3c7b'}], 'version': '1.0'}
         responses.add(responses.GET, 'http://' + rest_cmd,
                       json=json_mock,
                       status=200)
