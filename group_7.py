@@ -245,7 +245,31 @@ def tc_dna_intent_api_v1_file_namespace_ejbca():
         # execute the command and get response
         response = dnac.get(rest_cmd)
     else:
-        json_mock = {'response': [{'nameSpace': 'ejbca', 'name': 'truststore.jks', 'downloadPath': '/file/95b4f514-9b47-462e-b0c9-9b1a657f9610', 'fileSize': '2651', 'fileFormat': 'application/x-java-keystore', 'md5Checksum': 'aff0b05938b58e8ede458719497858eb', 'sha1Checksum': '09406a7c846188521351d448bed7ac801e5066f5', 'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472', 'downloadurl': '/ejbca/95b4f514-9b47-462e-b0c9-9b1a657f9610/truststore.jks', 'status': 'SUCCESS', 'createTimeStamp': '10/30/2018 21:17:55', 'updateTimeStamp': '10/30/2018 21:17:55', 'id': '9d442900-decf-428b-a205-19b7fd4ee1cb'}], 'id': '95b4f514-9b47-462e-b0c9-9b1a657f9610'}, {'nameSpace': 'ejbca', 'name': 'sdn-admin.p12', 'downloadPath': '/file/b944dee1-3143-400c-9da1-99a4a073984c', 'fileSize': '3468', 'fileFormat': 'application/pkcs12', 'md5Checksum': '096d5467b3a2c2d02904a61138a99f0e', 'sha1Checksum': '9f5adac7709b87faa7bdbf89f4c4506ef78b3e70', 'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472', 'downloadurl': '/ejbca/b944dee1-3143-400c-9da1-99a4a073984c/sdn-admin.p12', 'status': 'SUCCESS', 'createTimeStamp': '10/30/2018 21:17:33', 'updateTimeStamp': '10/30/2018 21:17:33', 'id': '78ab010d-cef1-4459-9a7b-20200548bf51'}], 'id': 'b944dee1-3143-400c-9da1-99a4a073984c'}], 'version': '1.0'}
+        json_mock = {'response': [{'nameSpace': 'ejbca',
+                                   'name': 'truststore.jks',
+                                   'downloadPath': '/file/95b4f514-9b47-462e-b0c9-9b1a657f9610',
+                                   'fileSize': '2651',
+                                   'fileFormat': 'application/x-java-keystore',
+                                   'md5Checksum': 'aff0b05938b58e8ede458719497858eb',
+                                   'sha1Checksum': '09406a7c846188521351d448bed7ac801e5066f5',
+                                   'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472',
+                                                       'downloadurl': '/ejbca/95b4f514-9b47-462e-b0c9-9b1a657f9610/truststore.jks',
+                                                       'status': 'SUCCESS',
+                                                       'createTimeStamp': '10/30/2018 21:17:55',
+                                                       'updateTimeStamp': '10/30/2018 21:17:55',
+                                                       'id': '9d442900-decf-428b-a205-19b7fd4ee1cb'}],
+                                   'id': '95b4f514-9b47-462e-b0c9-9b1a657f9610'}, {'nameSpace': 'ejbca',
+                                                                                   'name': 'sdn-admin.p12',
+                                                                                   'downloadPath': '/file/b944dee1-3143-400c-9da1-99a4a073984c',
+                                                                                   'fileSize': '3468', 'fileFormat': 'application/pkcs12',
+                                                                                   'md5Checksum': '096d5467b3a2c2d02904a61138a99f0e',
+                                                                                   'sha1Checksum': '9f5adac7709b87faa7bdbf89f4c4506ef78b3e70',
+                                                                                   'sftpServerList': [{'sftpserverid': '7020fdf5-c3fa-4965-80d0-53badd0d5472',
+                                                                                                       'downloadurl': '/ejbca/b944dee1-3143-400c-9da1-99a4a073984c/sdn-admin.p12',
+                                                                                                       'status': 'SUCCESS', 'createTimeStamp': '10/30/2018 21:17:33',
+                                                                                                       'updateTimeStamp': '10/30/2018 21:17:33',
+                                                                                                       'id': '78ab010d-cef1-4459-9a7b-20200548bf51'}],
+                                                                                   'id': 'b944dee1-3143-400c-9da1-99a4a073984c'}], 'version': '1.0'}
         responses.add(responses.GET, 'http://' + rest_cmd,
                       json=json_mock,
                       status=200)
