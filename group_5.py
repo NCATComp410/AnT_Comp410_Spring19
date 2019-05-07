@@ -140,8 +140,15 @@ def tc_dna_intent_api_v1_network_device():
     check_fields = True
     expected_fields = ['type', 'errorCode', 'family', 'location', 'role', 'errorDescription', 'lastUpdateTime', 'lastUpdated', 'tagCount', 'inventoryStatusDetail', 'macAddress', 'hostname', 'serialNumber', 'softwareVersion', 'locationName', 'upTime', 'softwareType', 'collectionInterval', 'roleSource', 'apManagerInterfaceIp', 'associatedWlcIp', 'bootDateTime', 'collectionStatus', 'interfaceCount', 'lineCardCount', 'lineCardId', 'managementIpAddress', 'memorySize', 'platformId', 'reachabilityFailureReason', 'reachabilityStatus', 'series', 'snmpContact', 'snmpLocation', 'tunnelUdpPort', 'waasDeviceMode', 'instanceUuid', 'instanceTenantId', 'id']
     for device in response.json()['response']:
-        device_fields = device.keys()
-        for field in expected_fields:
+
+       if is_functionh(device['hostname']):
+          tc.okay(device['hostname'] + ' is a valid host')
+       else:
+          tc.fail(device['hostname'] + ' INVALID host')
+
+       device_fields = device.keys()
+
+       for field in expected_fields:
             if field not in device_fields:
                 tc.fail(device['hostname'] + ':' + field + ' was expected but not found in the DNA-C results')
                 check_fields = False
@@ -259,6 +266,7 @@ def tc_dna_intent_api_v1_network_device():
             # don't return here like we did above - let's see if other serialNumbers are OK
         else:
             for device in response.json()['response']:
+
                 # expect response to be restricted to only the serialNumber we requested
                 # if it is not, this is a failure
                 if sn != device['serialNumber']:
@@ -443,6 +451,13 @@ def get_unique_device_id(dnac):
     # get unique list of devices
     device_list = []
     for device in response.json()['response']:
+
+
+        if is_functionh(device['hostname']):
+              tc.okay(device['hostname'] + ' is a valid host')
+        else:
+              tc.fail(device['hostname'] + ' INVALID host')
+
         if device['id'] not in device_list:
             device_list.append(device['id'])
     return device_list
@@ -577,7 +592,13 @@ def tc_dna_intent_api_v1_network_device_module():
         # get the unique module IDs
         module_list = []
         for device in response.json()['response']:
-            for line_card in device['lineCardId'].split(', '):
+
+              if is_functionh(device['hostname']):
+                  tc.okay(device['hostname'] + ' is a valid host')
+              else:
+                  tc.fail(device['hostname'] + ' INVALID host')
+
+        for line_card in device['lineCardId'].split(', '):
                 if line_card not in module_list:
                     module_list.append(line_card)
 
@@ -632,10 +653,10 @@ def run_all_tests():
     tc_dna_intent_api_v1_network_device()
 
     # # add new test cases to be run here
-    #tc_dna_intent_api_v1_network_device_collection_schedule_global()
-    #tc_dna_intent_api_v1_network_device_id_vlan()
-    #tc_dna_intent_api_v1_interface_network_device_range()
-    #tc_dna_intent_api_v1_network_device_module()
+    tc_dna_intent_api_v1_network_device_collection_schedule_global()
+    tc_dna_intent_api_v1_network_device_id_vlan()
+    tc_dna_intent_api_v1_interface_network_device_range()
+    tc_dna_intent_api_v1_network_device_module()
 
 
 run_all_tests()
