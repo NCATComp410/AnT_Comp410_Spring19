@@ -125,6 +125,12 @@ def tc_dna_intent_api_v1_network_device():
     host_list = []
     serialNumber_list = []
     for device in response.json()['response']:
+
+        if is_functionh(device['hostname']):
+            tc.okay(device['hostname'] + ' is a valid host')
+        else:
+            tc.fail(device['hostname'] + ' INVALID host')
+
         if device['hostname']:
             host_list.append(device['hostname'])
             serialNumber_list.append(device['serialNumber'])
