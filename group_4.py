@@ -3,6 +3,7 @@ from utils import TestCase
 import pprint
 import responses
 import requests
+import re
 
 # define a pretty-printer for diagnostics
 pp = pprint.PrettyPrinter(indent=4)
@@ -267,6 +268,7 @@ def tc_dna_intent_api_v1_network_device():
 
     rest_cmd = 'dna/intent/api/v1/network-device'
 
+    # sprint #2 - mock
     if not use_mock:
         # create a session to the DNA-C
         dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
@@ -342,61 +344,70 @@ def tc_dna_intent_api_v1_network_device():
 
         responses.add(responses.GET, 'http://' + rest_cmd, json=json_mock, status=200)
         response = requests.get('http://' + rest_cmd)
-        if response.status_code != 200:
-            # this test should fail if any other response code received
-            tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+
+    # sprint #1 - response code
+    if response.status_code != 200:
+        # this test should fail if any other response code received
+        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+    else:
+        # check to make sure there is at least 1 device present to work with
+        device_count = len(response.json()['response'])
+        if device_count:
+            tc.okay(f'found {device_count} total devices')
         else:
-            # check to make sure there is at least 1 device present to work with
-            device_count = response.json()['response']
-            if device_count:
-                tc.okay(f'found {device_count} total devices')
-            else:
-                # If no devices were found it's a pretty good bet that most/all remaining
-                # tests will fail, so, consider this a critical failure and abort here by
-                # setting abort=True
-                tc.fail('no devices were found', abort=True)
+            # If no devices were found it's a pretty good bet that most/all remaining
+            # tests will fail, so, consider this a critical failure and abort here by
+            # setting abort=True
+            tc.fail('no devices were found', abort=True)
 
-            # check the version
-            expected_version = tc.params['IntentApiV1NetworkDeviceCount']['Version']
-            actual_version = response.json()['version']
-            if expected_version == actual_version:
-                tc.okay('correct version found')
-            else:
-                tc.fail(f'expected version {expected_version} instead found {actual_version}')
-                check_fields = True
-                check_values = True
-                expected_keys = ['response', 'version']
+        # check the version
+        expected_version = tc.params['IntentApiV1NetworkDeviceCount']['Version']
+        actual_version = response.json()['version']
+        # sprint #4 - checking a field value
+        if expected_version == actual_version:
+            tc.okay('correct version found')
+        else:
+            tc.fail(f'expected version {expected_version} instead found {actual_version}')
 
-                for key in expected_keys:
-                    if key not in response.json():
-                        tc.fail(key + ':' + 'was expected but not found in the DNA=C results')
-                        check_fields = False
+        check_fields = True
+        check_values = True
+        # sprint #3 checking for expected fields
+        expected_keys = ['response', 'version']
 
-                if check_fields:
-                    tc.okay('all expected device fields were found')
-                else:
-                    tc.fail('all expected device fields not found')
+        for key in expected_keys:
+            if key not in response.json():
+                tc.fail(key + ':' + 'was expected but not found in the DNA=C results')
+                check_fields = False
 
-                if not str(response.json()['response']).isdigit():
-                    tc.fail("numeric value was expected to be a number but instead got: " + response.json()['response'])
-                    check_values = False
+        if check_fields:
+            tc.okay('all expected device fields were found')
+        else:
+            tc.fail('all expected device fields not found')
 
-                if not str(response.json()['version']) == '1.0':
-                    tc.fail(
-                        "1.0 was expected to be the value of Version but instead got: " + response.json()['response'])
-                    check_values = False
+        # Validate if this is a number such as x.y
+        # if not response.json()['version'].isdigit():
+        match = re.search(r'\d+.\d+', response.json()['version'])
+        if not match:
+            tc.fail("numeric value was expected to be a number but instead got: " + response.json()['version'])
+            check_values = False
 
-                if check_values:
-                    tc.okay('all fields had their expected values')
-                else:
-                    tc.fail('all or some fields had unexpected values')
+        # sprint #4 - checking a field value
+        if not str(response.json()['version']) == '1.0':
+            tc.fail(
+                "1.0 was expected to be the value of Version but instead got: " + response.json()['version'])
+            check_values = False
 
-                # test complete
-                tc.okay('complete')
+        if check_values:
+            tc.okay('all fields had their expected values')
+        else:
+            tc.fail('all or some fields had unexpected values')
+
+            # test complete
+            tc.okay('complete')
 
     #
 
-    pp.pprint(response.json())
+    #pp.pprint(response.json())
 
     for device in response.json()['response']:
         pp.pprint(device.keys())
