@@ -518,32 +518,43 @@ def tc_dna_intent_api_v1_network_device_id_vlan():
 
     tc.okay('found ' + str(len(device_list)) + ' devices:' + ','.join(device_list))
 
-    sn_ok = True
     for device_id in device_list:
         rest_cmd = 'dna/intent/api/v1/network-device/' + device_id + '/vlan'
+
+        # sprint #2
         if not use_mock:
             response = dnac.get(rest_cmd)
         else:
             # creating a mock here is more difficult.  For now will use a single response over and over
             json_mock = {'response': [{'vlanNumber': 1, 'numberOfIPs': 16, 'ipAddress': '10.10.22.97', 'prefix': '28', 'interfaceName': 'Vlan1', 'networkAddress': '10.10.22.96'}], 'version': '1.0'}
+
             responses.add(responses.GET, 'http://' + rest_cmd,
                           json=json_mock,
                           status=200)
             response = requests.get('http://' + rest_cmd)
 
 
-
+        # sprint #1
         if response.status_code != 200:
             # this test should fail if any other response code received
             tc.fail('expected 200-OK actual response was ' + str(response.status_code))
         else:
+            # sprint #3
+            expected_fields = ['vlanNumber', 'numberOfIPs', 'ipAddress', 'prefix', 'interfaceName', 'networkAddress']
+            for device in response.json()['response']:
+                for field in device:
+                    if field in expected_fields:
+                        tc.okay('found expected field ' + field)
 
-            for field in response.json()['response']:
+                # sprint #4
+                if is_valid_ipv4_address(device['ipAddress']):
+                    tc.okay('ip address was valid')
+                else:
+                    tc.fail('ip address was not valid')
+
                 # print list of fields found in this response
-                print(field.keys())
+                # print(field.keys())
 
-    if sn_ok:
-        tc.okay('serial numbers correct')
     # complete
     tc.okay('complete')
 
@@ -662,10 +673,10 @@ def tc_dna_intent_api_v1_network_device_module():
 # (1) Be sure to set use_mock = True
 #     For normal operation use_mock = False
 #     Don't check-in the code with use_mock = True!
-use_mock = True
+use_mock = False
 #
 # (2) Uncomment the following line to activate the responses module:
-@responses.activate
+#@responses.activate
 #
 # Once these two things have been done you will use the mock instead
 # of the real DNA-C.  It's important to know how do this since the
