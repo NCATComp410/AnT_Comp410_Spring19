@@ -388,6 +388,7 @@ def tc_dna_intent_api_v1_network_device_collection_schedule_global():
 
     rest_cmd = 'dna/intent/api/v1/network-device/collection-schedule/global'
 
+    # sprint 2
     if not use_mock:
         # create a session to the DNA-C
         dnac = DnaCenter(hostname=tc.params['DnaCenter']['Hostname'],
@@ -404,22 +405,47 @@ def tc_dna_intent_api_v1_network_device_collection_schedule_global():
                       status=200)
         response = requests.get('http://' + rest_cmd)
 
+    # sprint 1
     if response.status_code != 200:
         # this test should fail if any other response code received
        tc.fail('expected 200-OK actual response was ' + str(response.status_code))
     else:
         pp.pprint(response.json())
+
+        # sprint #3
+        check_fields = True
+        expected_fields = ['response', 'version']
+
+        for field in response.json():
+            if field in expected_fields:
+                tc.okay('Found expected field ' + field)
+            else:
+                tc.fail('Expected field not found')
+                check_fields = False
+
+        if not check_fields:
+            tc.fail('All expected fields were not found')
+        else:
+            tc.okay('All expected fields were found')
+
+        # sprint #4
+        # check to make sure there are only digits in response
+        if str(response.json()['response']).isdigit():
+            tc.okay('Response contained all digits')
+        else:
+            tc.fail('expected only digits and got something else')
+
          # complete
         tc.okay('complete')
         # check to make sure there is at least 1 device present to work with
-        device_count = response.json()['response']
-        if device_count:
-            tc.okay(f'found {device_count} total devices')
+        collection_schedule = response.json()['response']
+        if collection_schedule:
+            tc.okay(f'Collection schedule is {collection_schedule}')
         else:
             # If no devices were found it's a pretty good bet that most/all remaining
             # tests will fail, so, consider this a critical failure and abort here by
             # setting abort=True
-            tc.fail('no devices were found', abort=True)
+            tc.fail('no collection schedule found', abort=True)
 
 
 
