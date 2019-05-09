@@ -622,28 +622,38 @@ def tc_dna_intent_api_v1_network_device_module():
         # execute base command so we can get a list of modules
         response = dnac.get(rest_cmd)
     else:
+        # sprint #2
         json_mock = {'response': [{'type': 'Cisco ASR 1001-X Router', 'family': 'Routers', 'errorCode': 'ERROR-ENABLE-PASSWORD', 'location': None, 'role': 'BORDER ROUTER', 'lastUpdateTime': 1552701002821, 'macAddress': '00:c8:8b:80:bb:00', 'hostname': 'asr1001-x.abc.inc', 'serialNumber': 'FXS1932Q1SE', 'softwareVersion': '16.3.2', 'locationName': None, 'upTime': '34 days, 1:06:09.22', 'lastUpdated': '2019-03-16 01:50:02', 'tagCount': '0', 'inventoryStatusDetail': '<status><general code="FAILED_FEAT"/><failed_features names="79 features seem to have failed : Please check the credentials provided." code="ERROR_ENABLE_PASSWORD"/><topCause code="ERROR_ENABLE_PASSWORD"/>\n</status>', 'errorDescription': 'CLI enable password for the device could not be discovered. Please ensure correct credentials are available in global credentials or in discovery job and run discovery again. You can run the new discovery for this device alone using the discovery feature. You can also update the credentials of the device using update credentials option.', 'softwareType': 'IOS-XE', 'collectionInterval': 'Global Default', 'roleSource': 'AUTO', 'apManagerInterfaceIp': '', 'associatedWlcIp': '', 'bootDateTime': '2018-10-14 16:59:30', 'collectionStatus': 'Partial Collection Failure', 'interfaceCount': '12', 'lineCardCount': '9', 'lineCardId': '19557762-4170-42c0-b4ae-c539ee996a05, 184ddd93-2fc2-4baa-aa66-67e4e2948399, c5987ca2-3f69-4341-8cf5-00431f3add0c, ab808a88-85a0-434f-895d-7b98cd0e25fb, 1e38a03d-c5dd-46dc-8038-74e83b3da5ca, ba411ee4-6e98-4bf4-afdd-1601fcc5b9e9, 454acd43-5b66-4912-a692-bb00a9725267, d5e53e21-6e3d-4e8f-881a-ea619b133511, f4fc3497-9624-44d1-b32e-4b074706727c', 'managementIpAddress': '10.10.22.253', 'memorySize': '3819298032', 'platformId': 'ASR1001-X', 'reachabilityFailureReason': '', 'reachabilityStatus': 'Reachable', 'series': 'Cisco ASR 1000 Series Aggregation Services Routers', 'snmpContact': '', 'snmpLocation': '', 'tunnelUdpPort': None, 'waasDeviceMode': None, 'instanceTenantId': '5bd3634ab2bea0004c3ebb58', 'instanceUuid': '1904ca0d-01be-4d13-88e5-4f4f9980b512', 'id': '1904ca0d-01be-4d13-88e5-4f4f9980b512'}, {'type': 'Cisco Catalyst 9300 Switch', 'family': 'Switches and Hubs', 'errorCode': None, 'location': None, 'role': 'ACCESS', 'lastUpdateTime': 1552701248479, 'macAddress': 'f8:7b:20:67:62:80', 'hostname': 'cat_9k_1.marius.x-trem.ro', 'serialNumber': 'FCW2136L0AK', 'softwareVersion': '16.6.1', 'locationName': None, 'upTime': '23 days, 10:39:07.94', 'lastUpdated': '2019-03-16 01:54:08', 'tagCount': '0', 'inventoryStatusDetail': '<status><general code="FAILED_FEAT"/><topCause code="UNKNOWN"/>\n</status>', 'errorDescription': None, 'softwareType': 'IOS-XE', 'collectionInterval': 'Global Default', 'roleSource': 'AUTO', 'apManagerInterfaceIp': '', 'associatedWlcIp': '', 'bootDateTime': '2018-10-16 10:37:51', 'collectionStatus': 'Managed', 'interfaceCount': '41', 'lineCardCount': '2', 'lineCardId': 'df065d20-8d9b-4b66-a5ed-30aab545b85b, 766f14fe-8bb6-4ac7-a58c-f456f7e2ab34', 'managementIpAddress': '10.10.22.66', 'memorySize': '889226872', 'platformId': 'C9300-24UX', 'reachabilityFailureReason': '', 'reachabilityStatus': 'Reachable', 'series': 'Cisco Catalyst 9300 Series Switches', 'snmpContact': '', 'snmpLocation': '', 'tunnelUdpPort': None, 'waasDeviceMode': None, 'instanceTenantId': '5bd3634ab2bea0004c3ebb58', 'instanceUuid': '1a85db61-8bf2-4717-9060-9776f42e4581', 'id': '1a85db61-8bf2-4717-9060-9776f42e4581'}, {'type': 'Cisco Catalyst 9300 Switch', 'family': 'Switches and Hubs', 'errorCode': None, 'location': None, 'role': 'ACCESS', 'lastUpdateTime': 1552700548320, 'macAddress': 'f8:7b:20:71:4d:80', 'hostname': 'cat_9k_2.marius.x-trem.ro', 'serialNumber': 'FCW2140L039', 'softwareVersion': '16.6.4a', 'locationName': None, 'upTime': '24 days, 5:57:03.56', 'lastUpdated': '2019-03-16 01:42:28', 'tagCount': '0', 'inventoryStatusDetail': '<status><general code="FAILED_FEAT"/><topCause code="UNKNOWN"/>\n</status>', 'errorDescription': None, 'softwareType': 'IOS-XE', 'collectionInterval': 'Global Default', 'roleSource': 'AUTO', 'apManagerInterfaceIp': '', 'associatedWlcIp': '', 'bootDateTime': '2018-10-16 10:37:05', 'collectionStatus': 'Managed', 'interfaceCount': '41', 'lineCardCount': '2', 'lineCardId': 'fb1bc751-e9c3-4f76-8dd6-e1f8eb125f5d, 0c8e3427-8af1-4117-a1a1-d26f62fdba57', 'managementIpAddress': '10.10.22.70', 'memorySize': '1425966824', 'platformId': 'C9300-24UX', 'reachabilityFailureReason': '', 'reachabilityStatus': 'Reachable', 'series': 'Cisco Catalyst 9300 Series Switches', 'snmpContact': '', 'snmpLocation': '', 'tunnelUdpPort': None, 'waasDeviceMode': None, 'instanceTenantId': '5bd3634ab2bea0004c3ebb58', 'instanceUuid': '2800864b-78ff-4bfd-9a60-83364d35c197', 'id': '2800864b-78ff-4bfd-9a60-83364d35c197'}, {'type': 'Cisco Catalyst38xx stack-able ethernet switch', 'family': 'Switches and Hubs', 'errorCode': None, 'location': None, 'role': 'DISTRIBUTION', 'lastUpdateTime': 1552700858994, 'macAddress': 'cc:d8:c1:15:d2:80', 'hostname': 'cs3850.marius.x-trem.ro', 'serialNumber': 'FOC1833X0AR', 'softwareVersion': '16.6.2s', 'locationName': None, 'upTime': '24 days, 6:05:05.68', 'lastUpdated': '2019-03-16 01:47:38', 'tagCount': '0', 'inventoryStatusDetail': '<status><general code="FAILED_FEAT"/><topCause code="UNKNOWN"/>\n</status>', 'errorDescription': None, 'softwareType': 'IOS-XE', 'collectionInterval': 'Global Default', 'roleSource': 'AUTO', 'apManagerInterfaceIp': '', 'associatedWlcIp': '', 'bootDateTime': '2018-10-16 10:40:12', 'collectionStatus': 'Managed', 'interfaceCount': '59', 'lineCardCount': '2', 'lineCardId': '529ae584-3c97-492d-bad0-a79e25be334b, a7b77de2-a3dd-400d-a826-6c1ae387a555', 'managementIpAddress': '10.10.22.73', 'memorySize': '873744896', 'platformId': 'WS-C3850-48U-E', 'reachabilityFailureReason': '', 'reachabilityStatus': 'Reachable', 'series': 'Cisco Catalyst 3850 Series Ethernet Stackable Switch', 'snmpContact': '', 'snmpLocation': '', 'tunnelUdpPort': None, 'waasDeviceMode': None, 'instanceTenantId': '5bd3634ab2bea0004c3ebb58', 'instanceUuid': '79d3a90b-1b95-4cd8-a9bd-6d5952814432', 'id': '79d3a90b-1b95-4cd8-a9bd-6d5952814432'}], 'version': '1.0'}
         responses.add(responses.GET, 'http://' + rest_cmd,
                       json=json_mock,
                       status=200)
         response = requests.get('http://' + rest_cmd)
 
+    # sprint #1
     if response.status_code != 200:
         # this test should fail if any other response code received
         tc.fail('expected 200-OK actual response was ' + str(response.status_code))
     else:
         # get the unique module IDs
+        # sprint #4
         module_list = []
         for device in response.json()['response']:
 
-              if is_functionh(device['hostname']):
-                  tc.okay(device['hostname'] + ' is a valid host')
-              else:
-                  tc.fail(device['hostname'] + ' INVALID host')
+            # sprint #4
+            if is_functionh(device['hostname']):
+              tc.okay(device['hostname'] + ' is a valid host')
+            else:
+              tc.fail(device['hostname'] + ' INVALID host')
+
 
         for line_card in device['lineCardId'].split(', '):
                 if line_card not in module_list:
                     module_list.append(line_card)
+
+        # sprint #3
+        expected_fileds = [ 'name', 'description', 'vendorEquipmentType', 'isReportingAlarmsAllowed', 'serialNumber',
+                            'manufacturer', 'partNumber', 'entityPhysicalIndex', 'containmentEntity',
+                            'isFieldReplaceable', 'id' ]
 
         # get information about each line card
         for module in module_list:
@@ -658,11 +668,15 @@ def tc_dna_intent_api_v1_network_device_module():
                 response = requests.get('http://' + rest_cmd)
 
             if response.status_code != 200:
-             # this test should fail if any other response code received
-             tc.fail('expected 200-OK actual response was ' + str(response.status_code))
+                # this test should fail if any other response code received
+                tc.fail('expected 200-OK actual response was ' + str(response.status_code))
             else:
              # here are the expected fields
-             print(response.json()['response'].keys())
+                #print(response.json()['response'].keys())
+                # sprint #3
+                for field in response.json()['response'].keys():
+                    if field in expected_fileds:
+                        tc.okay('found expected field ' + field)
 
         # complete
         tc.okay('complete')
